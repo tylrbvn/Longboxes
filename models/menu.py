@@ -6,7 +6,7 @@
 #########################################################################
 
 response.logo = A(B('Longboxes 📦'),
-                  _class="navbar-brand",_href="#",
+                  _class="navbar-brand",_href=URL('default', 'index'),
                   _id="web2py-logo")
 response.title = request.application.replace('_',' ').title()
 response.subtitle = ''
@@ -24,12 +24,12 @@ response.meta.generator = 'Web2py Web Framework'
 ## this is the main application menu add/remove items as required
 #########################################################################
 
-response.menu = [
-    (T('Home'), False, URL('default', 'index'), []),
-    (T('New Item'), False, None, [
-       (T('Comic'), False, URL('add', 'comic')),
-        (T('Collection'), False, URL('add', 'box'))
-        ]),
-]
+if auth.is_logged_in():
+    response.menu = [
+        (T('New Item'), False, None, [
+           (T('Comic'), False, URL('default', 'new_comic')),
+            (T('Collection'), False, URL('default', 'new_box'))
+            ]),
+    ]
 
 if "auth" in locals(): auth.wikimenu()
