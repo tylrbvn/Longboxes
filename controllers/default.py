@@ -20,43 +20,6 @@ def index():
     #response.flash = T("Hello World")
     return dict(message=T('Welcome to Longboxes!'))
 
-def old_comic():
-    #Form too create a new comic
-    addform = FORM(DIV(LABEL('Title:', _for='comic_title')),
-                   DIV(INPUT(_name='comic_title', requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Issue Number:', _for='comic_issue')),
-                   DIV(INPUT(_name='comic_issue',requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Writers:', _for='comic_writers')),
-                   DIV(INPUT(_name='comic_writers',requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Artists:', _for='comic_artists')),
-                   DIV(INPUT(_name='comic_artists',requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Publisher:', _for='comic_publisher')),
-                   DIV(INPUT(_name='comic_publisher',requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Description:', _for='comic_description')),
-                   DIV(TEXTAREA(_name='comic_description', requires=IS_NOT_EMPTY())),
-                   DIV(LABEL('Cover Art:', _for='comic_art')),
-                   DIV(INPUT(_name='comic_art', _type='file', requires=IS_NOT_EMPTY())),
-                   DIV('No larger than 400 x 300 pixels (to be implemented)'),
-                   DIV(INPUT(_type='submit')),
-                   DIV(LABEL()))
-
-    if addform.accepts(request, session):
-        db.comic.insert(title=request.vars.comic_title,
-        issue=request.vars.comic_issue,
-        writers=request.vars.comic_writers,
-        artists=request.vars.comic_artists,
-        publisher=request.vars.comic_publisher,
-        description=request.vars.comic_description,
-        cover=request.vars.comic_art,
-        owner_id=auth.user.id)
-        db.commit
-        response.flash = 'New comic succesfully added.'
-    elif addform.errors:
-        response.flash = 'One or more of the entries is incorrect:'
-    #else:
-        #response.flash = 'Please complete the form below to add a new comic.'
-    return dict(addform=addform)
-
 @auth.requires_login()
 def new_comic():
     db.comic.owner_id.readable = db.comic.owner_id.writable = False
