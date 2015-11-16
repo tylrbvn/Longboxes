@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
+import datetime
 
 #########################################################################
 ## This is a sample controller
@@ -26,13 +27,28 @@ def new_comic():
     form = SQLFORM(db.comic)
     form.vars.owner_id = auth.user.id
     if form.accepts(request.vars, session):
-        response.flash = 'New comic succesfully added.'
+        #Get the ID of the users unfiled box and insert the new comic
+        query = (db.box.owner_id == form.vars.owner_id) & (db.box.name == 'Unfiled')
+        unfiled_id = db.box(query).id
+        db.comic_in_box.insert(comic_id = form.vars.id, box_id = unfiled_id)
+        db.commit
+        response.flash = 'New comic succesfully added to your unfiled box.'
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
 
+@auth.requires_login()
 def new_box():
-    return dict()
+    db.box.owner_id.readable = db.box.owner_id.writable = False
+    db.box.created_on.readable = db.box.created_on.writable = False
+    form = SQLFORM(db.box)
+    form.vars.owner_id = auth.user.id
+    form.vars.created_on = datetime.date.today()
+    if form.accepts(request.vars, session):
+        response.flash = 'New box succesfully created.'
+    elif form.errors:
+        response.flash = 'One or more of the entries is incorrect:'
+    return dict(addform=form)
 
 def user():
     """
@@ -51,7 +67,6 @@ def user():
     to decorate functions that need access control
     """
     return dict(form=auth())
-
 
 @cache.action()
 def download():

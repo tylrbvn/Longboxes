@@ -28,7 +28,7 @@ if auth.is_logged_in():
     response.menu = [
         (T('New Item'), False, None, [
            (T('Comic'), False, URL('default', 'new_comic')),
-            (T('Collection'), False, URL('default', 'new_box'))
+            (T('Box'), False, URL('default', 'new_box'))
             ]),
     ]
 

@@ -113,10 +113,10 @@ auth.settings.reset_password_requires_verification = True
 # auth.enable_record_versioning(db)
 
 #comic table
-db.define_table('comic', Field('title'), Field('issue', 'integer'), Field('writers', 'list:string'), Field('artists', 'list:string'), Field('publisher'), Field('description'), Field('cover', 'upload'), Field('owner_id', 'reference auth_user'))
+db.define_table('comic', Field('title', notnull=True), Field('issue', 'integer', notnull=True), Field('writers', 'list:string', notnull=True), Field('artists', 'list:string', notnull=True), Field('publisher', notnull=True), Field('description'), Field('cover', 'upload', autodelete=True), Field('owner_id', 'reference auth_user', notnull=True))
 
 #box table
-db.define_table('box', Field('name'), Field('created_on', 'date'), Field('is_public', 'boolean', default=False), Field('owner_id', 'reference auth_user'))
+db.define_table('box', Field('name', notnull=True), Field('created_on', 'date', notnull=True), Field('is_public', 'boolean', default=False), Field('owner_id', 'reference auth_user', notnull=True))
 
 #junction table
-db.define_table('comic_in_box', Field('comic_id', 'reference comic'), Field('box_id', 'reference box'))
+db.define_table('comic_in_box', Field('comic_id', 'reference comic', notnull=True), Field('box_id', 'reference box', notnull=True))

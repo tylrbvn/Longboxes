@@ -13,11 +13,11 @@ p6
 I6
 sS'sql'
 p7
-S'CHAR(512)'
+S'CHAR(512) NOT NULL'
 p8
 sS'notnull'
 p9
-I00
+I01
 sS'type'
 p10
 S'string'
@@ -48,10 +48,10 @@ I00
 sg6
 I2
 sg7
-S'CHAR(512)'
+S'CHAR(512) NOT NULL'
 p17
 sg9
-I00
+I01
 sg10
 g11
 ssS'cover'
@@ -81,10 +81,10 @@ I00
 sg6
 I4
 sg7
-S'TEXT'
+S'TEXT NOT NULL'
 p24
 sg9
-I00
+I01
 sg10
 S'list:string'
 p25
@@ -98,10 +98,10 @@ I00
 sg6
 I5
 sg7
-S'TEXT'
+S'TEXT NOT NULL'
 p28
 sg9
-I00
+I01
 sg10
 g25
 ssS'issue'
@@ -114,10 +114,10 @@ I00
 sg6
 I3
 sg7
-S'INTEGER'
+S'INTEGER NOT NULL'
 p31
 sg9
-I00
+I01
 sg10
 S'integer'
 p32
@@ -136,10 +136,11 @@ p35
 sg9
 I00
 sg10
-g33
-ssS'owner_id'
+S'id'
 p36
-(dp37
+ssS'owner_id'
+p37
+(dp38
 g4
 I512
 sg5
@@ -147,11 +148,11 @@ I00
 sg6
 I9
 sg7
-S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  '
-p38
+S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  NOT NULL '
+p39
 sg9
-I00
+I01
 sg10
 S'reference auth_user'
-p39
+p40
 ss.
