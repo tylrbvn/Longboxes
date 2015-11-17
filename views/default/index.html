@@ -12,19 +12,28 @@
     </header>
 {{end}}
 
-{{if 'message' in globals():}}
-<h2>{{=message}}</h2>
+<h2>Welcome to Longboxes!</h2>
 <p class="lead">{{=T('Your online comic collection.')}}</p>
-<h5>Your comic boxes:</h5>
-{{elif 'content' in globals():}}
-{{=content}}
+
+<!--Check if the user has any public boxes and display-->
+{{if len(public_boxes)>0:}}
+{{=H5("Your public comic boxes:")}}
+{{for box in public_boxes:}}
+{{=P(box.name)}}
+{{pass}}
 {{else:}}
-{{=BEAUTIFY(response._vars)}}
+{{=H5("You have no public boxes")}}
 {{pass}}
 
+<!--Don't need to check if empty as unfiled is always private-->
+<h5>Your private comic boxes:</h5>
+{{for box in private_boxes:}}
+{{=P(box.name)}}
+{{pass}}
 
 {{block right_sidebar}}
-<!--<div class="panel panel-info">
+<!--
+<div class="panel panel-info">
   <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
       href="{{=URL('admin','default','index')}}">
       <i class="glyphicon glyphicon-cog"></i>
@@ -38,5 +47,6 @@
     <li class="list-group-item"><a href="http://web2py.com">web2py.com</a></li>
     <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
   </ul>
-</div>-->
+</div>
+-->
 {{end}}

@@ -19,7 +19,7 @@ def index():
     return auth.wiki()
     """
     #response.flash = T("Hello World")
-    return dict(message=T('Welcome to Longboxes!'))
+    return dict(public_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select(), private_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public != True)).select())
 
 @auth.requires_login()
 def new_comic():
@@ -27,25 +27,34 @@ def new_comic():
     form = SQLFORM(db.comic)
     form.vars.owner_id = auth.user.id
     if form.accepts(request.vars, session):
-        #Get the ID of the users unfiled box and insert the new comic
-        query = (db.box.owner_id == form.vars.owner_id) & (db.box.name == 'Unfiled')
+        query = (db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')
         unfiled_id = db.box(query).id
         db.comic_in_box.insert(comic_id = form.vars.id, box_id = unfiled_id)
         db.commit
-        response.flash = 'New comic succesfully added to your unfiled box.'
+        response.flash = "New comic '" + form.vars.title + "' succesfully created!"
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
 
 @auth.requires_login()
 def new_box():
-    db.box.owner_id.readable = db.box.owner_id.writable = False
-    db.box.created_on.readable = db.box.created_on.writable = False
-    form = SQLFORM(db.box)
-    form.vars.owner_id = auth.user.id
-    form.vars.created_on = datetime.date.today()
-    if form.accepts(request.vars, session):
-        response.flash = 'New box succesfully created.'
+    #Form to create a new box
+    form = FORM(DIV(LABEL('Name:', _for='name')),
+                DIV(INPUT(_name='name', requires=IS_NOT_EMPTY())),
+                DIV(LABEL('Public box:', _for='is_public'), INPUT(_name='is_public', _type='checkbox')),
+                DIV(INPUT(_type='submit')))
+    if form.accepts(request, session):
+        query = ((db.box.owner_id == auth.user.id) & (db.box.name == form.vars.name))
+        count = db(query).count()
+        if (count == 0):
+            db.box.insert(name=request.vars.name,
+            is_public=request.vars.is_public,
+            owner_id=auth.user.id,
+            created_on = datetime.date.today())
+            db.commit
+            response.flash = "New box '" + form.vars.name + "' succesfully created!"
+        else:
+            response.flash = "You already have a box called '" + form.vars.name + "', please enter a new name!"
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
