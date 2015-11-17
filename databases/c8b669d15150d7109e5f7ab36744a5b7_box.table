@@ -32,50 +32,16 @@ I00
 sg6
 I3
 sg7
-S'DATE NOT NULL'
+S'TIMESTAMP NOT NULL'
 p14
 sg9
 I01
 sg10
-S'date'
+S'datetime'
 p15
-ssS'id'
+ssS'owner_id'
 p16
 (dp17
-g4
-I512
-sg5
-I00
-sg6
-I1
-sg7
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
-p18
-sg9
-I00
-sg10
-S'id'
-p19
-ssS'name'
-p20
-(dp21
-g4
-I512
-sg5
-I00
-sg6
-I2
-sg7
-S'CHAR(512) NOT NULL'
-p22
-sg9
-I01
-sg10
-S'string'
-p23
-ssS'owner_id'
-p24
-(dp25
 g4
 I512
 sg5
@@ -84,10 +50,43 @@ sg6
 I5
 sg7
 S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  NOT NULL '
-p26
+p18
 sg9
 I01
 sg10
 S'reference auth_user'
-p27
+p19
+ssS'id'
+p20
+(dp21
+g4
+I512
+sg5
+I00
+sg6
+I1
+sg7
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p22
+sg9
+I00
+sg10
+g20
+ssS'name'
+p23
+(dp24
+g4
+I512
+sg5
+I00
+sg6
+I2
+sg7
+S'CHAR(512) NOT NULL'
+p25
+sg9
+I01
+sg10
+S'string'
+p26
 ss.

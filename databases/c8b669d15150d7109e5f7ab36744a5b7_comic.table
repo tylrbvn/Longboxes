@@ -136,11 +136,10 @@ p35
 sg9
 I00
 sg10
-S'id'
-p36
+g33
 ssS'owner_id'
-p37
-(dp38
+p36
+(dp37
 g4
 I512
 sg5
@@ -149,10 +148,10 @@ sg6
 I9
 sg7
 S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  NOT NULL '
-p39
+p38
 sg9
 I01
 sg10
 S'reference auth_user'
-p40
+p39
 ss.

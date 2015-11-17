@@ -24,7 +24,7 @@ def index():
         db.box.insert(name='Unfiled',
         is_public='False',
         owner_id=auth.user.id,
-        created_on = datetime.date.today())
+        created_on = datetime.datetime.now())
         db.commit
     return dict(public_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select(), private_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public != True)).select())
 
@@ -37,7 +37,7 @@ def new_comic():
         unfiled_id = db.box(query).id
         db.comic_in_box.insert(comic_id = form.vars.id, box_id = unfiled_id)
         db.commit
-        response.flash = "New comic '" + form.vars.title + "' succesfully created!"
+        response.flash = "New comic '" + form.vars.title + "' successfully created!"
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
@@ -55,9 +55,9 @@ def new_box():
             db.box.insert(name=request.vars.name,
             is_public=request.vars.is_public,
             owner_id=auth.user.id,
-            created_on = datetime.date.today())
+            created_on = datetime.datetime.now())
             db.commit
-            response.flash = "New box '" + form.vars.name + "' succesfully created!"
+            response.flash = "New box '" + form.vars.name + "' successfully created!"
         else:
             response.flash = "You already have a box called '" + form.vars.name + "', please enter a new name!"
     elif form.errors:
