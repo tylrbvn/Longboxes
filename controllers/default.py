@@ -17,8 +17,15 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    #response.flash = T("Hello World")
-    return dict()
+
+    #Get the 5 largest public boxes
+    count = db.comic_in_box.box_id.count()  #What we are counting, the number of comics in each box
+    #Perform the joint query
+    largest_boxes = db((db.box.id==db.comic_in_box.box_id) & (db.box.is_public==True)).select(db.box.name, count, groupby=db.comic_in_box.box_id, orderby=~count, limitby=(0,5))
+
+    #Get the 5 newest public boxes
+    newest_boxes=db(db.box.is_public == True).select(orderby=~db.box.created_on, limitby=(0, 5))
+    return dict(newest_boxes=newest_boxes,largest_boxes=largest_boxes)
 
 def user():
     """

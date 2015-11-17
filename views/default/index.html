@@ -15,6 +15,26 @@
 <h2>Welcome to Longboxes!</h2>
 <p class="lead">{{=T('Your online comic collection.')}}</p>
 
+<!--Display 5 largest boxes-->
+{{if len(largest_boxes)>0:}}
+{{=H5("Largest public boxes:")}}
+{{for box in largest_boxes:}}
+{{=P(box.box.name, ' (', box._extra['COUNT(comic_in_box.box_id)'], ' comics)')}}
+{{pass}}
+{{else:}}
+{{=H5("There are no large public boxes to display")}}
+{{pass}}
+
+<!--Display 5 newest boxes-->
+{{if len(newest_boxes)>0:}}
+{{=H5("Newest public boxes:")}}
+{{for box in newest_boxes:}}
+{{=P(box.name, ' (Created: ', box.created_on, ')')}}
+{{pass}}
+{{else:}}
+{{=H5("There are no new public boxes to display")}}
+{{pass}}
+
 {{block right_sidebar}}
 <!--
 <div class="panel panel-info">
