@@ -91,6 +91,10 @@ mail.settings.login = myconf.take('smtp.login')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+auth.settings.login_next = URL('collection', 'index')
+auth.settings.profile_next = URL('collection', 'index')
+auth.settings.register_next = URL('collection', 'index')
+auth.settings.change_password_next = URL('collection', 'index')
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example

@@ -24,12 +24,14 @@ response.meta.generator = 'Web2py Web Framework'
 ## this is the main application menu add/remove items as required
 #########################################################################
 
+
+
 if auth.is_logged_in():
     response.menu = [
+        (T('My Collection'), False, URL('collection', 'index'), []),
         (T('New Item'), False, None, [
-           (T('Comic'), False, URL('default', 'new_comic')),
-            (T('Box'), False, URL('default', 'new_box'))
-            ]),
+           (T('Comic'), False, URL('collection', 'new_comic')),
+            (T('Box'), False, URL('collection', 'new_box'))]),
     ]
 
 if "auth" in locals(): auth.wikimenu()

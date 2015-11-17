@@ -62,7 +62,7 @@
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav navbar-right">
-            {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown', user_identifier='%(screen_name)s') or ''}}
+            {{='auth' in globals() and auth.navbar('Welcome',referrer_actions=['collection', 'index'],mode='dropdown', user_identifier='%(screen_name)s') or ''}}
           </ul>
           {{if response.menu:}}
           {{=MENU(response.menu, _class='nav navbar-nav',li_class='dropdown',ul_class='dropdown-menu')}}
