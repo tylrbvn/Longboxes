@@ -30,8 +30,8 @@ if auth.is_logged_in():
     response.menu = [
         (T('My Collection'), False, URL('collection', 'index'), []),
         (T('New Item'), False, None, [
-           (T('Comic'), False, URL('collection', 'new_comic')),
-            (T('Box'), False, URL('collection', 'new_box'))]),
+           (T('Comic'), False, URL('comic', 'new')),
+            (T('Box'), False, URL('box', 'new'))]),
     ]
 
 if "auth" in locals(): auth.wikimenu()
