@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+
+<h2>View Box</h2>
+<!--<div class="flash">{{=response.flash or ''}}</div>-->
+<!--Display 5 largest boxes-->
+{{if ('boxes' in globals()):}}
+{{for box in boxes:}}
+<ul>
+  <li><strong>Box name:</strong> {{=box.name}}</li>
+  <li><strong>Created on:</strong> {{=box.created_on}}</li>
+  <li><strong>Public box:</strong> {{=box.is_public}}</li>
+  <li><strong>Owner id:</strong> {{=box.owner_id}}</li>
+</ul>
+{{=P(box)}}
+{{pass}}
+{{else:}}
+{{=H5("There is no box to display")}}
+{{pass}}
+{{=A('Return to collection', _href=URL('collection','index'))}}

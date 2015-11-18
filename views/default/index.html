@@ -13,13 +13,13 @@
 {{end}}
 
 <h2>Welcome to Longboxes!</h2>
-<p class="lead">{{=T('Your online comic collection.')}}</p>
+<p class="lead">{{=T("A comic collector's favourite tool.")}}</p>
 
 <!--Display 5 largest boxes-->
 {{if len(largest_boxes)>0:}}
 {{=H5("Largest public boxes:")}}
 {{for box in largest_boxes:}}
-{{=P(box.box.name, ' (', box._extra['COUNT(comic_in_box.box_id)'], ' comics)')}}
+{{=DIV(A(box.box.name, _href=URL('box','view', args=[box.box.id])),' (' + str(box._extra['COUNT(comic_in_box.box_id)']) + ' comics)')}}
 {{pass}}
 {{else:}}
 {{=H5("There are no large public boxes to display")}}
@@ -29,7 +29,7 @@
 {{if len(newest_boxes)>0:}}
 {{=H5("Newest public boxes:")}}
 {{for box in newest_boxes:}}
-{{=P(box.name, ' (Created: ', box.created_on, ')')}}
+{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])),' (Created: ' + str(box.created_on) + ')')}}
 {{pass}}
 {{else:}}
 {{=H5("There are no new public boxes to display")}}

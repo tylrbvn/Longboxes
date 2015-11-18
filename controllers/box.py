@@ -31,3 +31,11 @@ def new():
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
+
+def view():
+    box_id = request.args(0)
+    if box_id is not None:
+        result = db((db.box.id == box_id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id))).select()
+        if len(result)>0:
+            return dict(boxes = result)
+    return dict()

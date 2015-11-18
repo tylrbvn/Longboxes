@@ -21,7 +21,7 @@ def index():
     #Get the 5 largest public boxes
     count = db.comic_in_box.box_id.count()  #What we are counting, the number of comics in each box
     #Perform the joint query
-    largest_boxes = db((db.box.id==db.comic_in_box.box_id) & (db.box.is_public==True)).select(db.box.name, count, groupby=db.comic_in_box.box_id, orderby=~count, limitby=(0,5))
+    largest_boxes = db((db.box.id==db.comic_in_box.box_id) & (db.box.is_public==True)).select(db.box.name, db.box.id, count, groupby=db.comic_in_box.box_id, orderby=~count, limitby=(0,5))
 
     #Get the 5 newest public boxes
     newest_boxes=db(db.box.is_public == True).select(orderby=~db.box.created_on, limitby=(0, 5))
