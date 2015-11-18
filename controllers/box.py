@@ -36,7 +36,7 @@ def new():
 def view():
     box_id = request.args(0)
     if box_id is not None:
-        boxes = db((db.box.id == box_id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id))).select()
+        boxes = db((db.box.id == box_id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id)) & (db.box.owner_id == db.auth_user.id)).select()
         if len(boxes)>0:
             comics = db((db.comic_in_box.box_id == box_id) & (db.comic_in_box.comic_id == db.comic.id)).select()
             return dict(boxes = boxes, comics = comics)

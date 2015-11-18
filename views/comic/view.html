@@ -6,21 +6,34 @@
 {{if ('comics' in globals()):}}
     {{for comic in comics:}}
       <!--Full comic view-->
-      <h2>{{=comic.title}}</h1>
-      {{if (comic.cover):}}
-        {{=IMG(_src=URL('default', 'download',  args=comic.cover), _width=150)}}
+      <h2>{{=comic.comic.title}}</h1>
+      {{if (comic.comic.cover):}}
+        {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+      {{pass}}
       </br></br>
-      <strong>Issue number:</strong> {{=comic.issue}}</br>
-      <strong>Writers:</strong> {{=comic.writers}}</br>
-      <strong>Artists:</strong> {{=comic.artists}}</br>
-      <strong>Publisher:</strong> {{=comic.publisher}}</br>
-      {{if (comic.description):}}
-        <strong>Description:</strong> {{=comic.description}}</br>
+      <strong>Owner:</strong> {{=comic.auth_user.screen_name}}</br>
+      <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
+      <strong>Writers:</strong>
+      <ul>
+      {{for writer in comic.comic.writers:}}
+        <li>{{=writer}}</li>
       {{pass}}
+      </ul>
+        <strong>Artists:</strong>
+      <ul>
+      {{for artist in comic.comic.artists:}}
+        <li>{{=artist}}</li>
       {{pass}}
-{{pass}}
+      </ul>
+      <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
+      {{if (comic.comic.description):}}
+        <strong>Description:</strong> {{=comic.comic.description}}</br>
+      {{pass}}
+    {{pass}}
 {{else:}}
   {{=H5("There is no comic to display")}}
 {{pass}}
 </br>
-{{=A('Return to collection', _href=URL('collection','index'))}}
+<input type="button" value="Go Back" onclick="history.back(-1)" />
+</br>
+</br>
