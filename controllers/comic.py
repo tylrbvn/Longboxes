@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
-@auth.requires_login()
 
 #########################################################################
 ## This is a sample controller
@@ -9,6 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+@auth.requires_login()
 def new():
     db.comic.owner_id.readable = db.comic.owner_id.writable = False
     form = SQLFORM(db.comic)
@@ -23,6 +23,7 @@ def new():
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
 
+@auth.requires_login()
 def view():
     comic_id = request.args(0)
     if comic_id is not None:

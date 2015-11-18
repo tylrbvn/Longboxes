@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 import datetime
-@auth.requires_login()
 
 #########################################################################
 ## This is a sample controller
@@ -10,6 +9,7 @@ import datetime
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+@auth.requires_login()
 def index():
     """
     example action using the internationalization operator T and flash
