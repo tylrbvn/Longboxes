@@ -4,16 +4,35 @@
 <!--<div class="flash">{{=response.flash or ''}}</div>-->
 <!--Display 5 largest boxes-->
 {{if ('boxes' in globals()):}}
-{{for box in boxes:}}
-<ul>
-  <li><strong>Box name:</strong> {{=box.name}}</li>
-  <li><strong>Created on:</strong> {{=box.created_on}}</li>
-  <li><strong>Public box:</strong> {{=box.is_public}}</li>
-  <li><strong>Owner id:</strong> {{=box.owner_id}}</li>
-</ul>
-{{=P(box)}}
+  {{for box in boxes:}}
+    <ul>
+      <li><strong>Box name:</strong> {{=box.name}}</li>
+    </ul>
+    <strong>Created on:</strong> {{=box.created_on}}</br>
+    <strong>Public box:</strong> {{=box.is_public}}</br>
+    <strong>Owner id:</strong> {{=box.owner_id}}</br>
+
+    {{for comic in comics:}}
+      <!--Insert comic PREVIEW here-->
+      </br>
+      <ul>
+        <li><strong>Comic title:</strong> {{=comic.comic.title}}</li>
+      </ul>
+      <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
+      <strong>Writers:</strong> {{=comic.comic.writers}}</br>
+      <strong>Artists:</strong> {{=comic.comic.artists}}</br>
+      <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
+      {{if (comic.comic.description):}}
+        <strong>Description:</strong> {{=comic.comic.description}}</br>
+      {{pass}}
+      {{if (comic.comic.cover):}}
+        <strong>Cover art:</strong></br>
+        {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+      </br>
+      {{pass}}
+  {{pass}}
 {{pass}}
 {{else:}}
-{{=H5("There is no box to display")}}
+  {{=H5("There is no box to display")}}
 {{pass}}
 {{=A('Return to collection', _href=URL('collection','index'))}}

@@ -22,3 +22,11 @@ def new():
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
+
+def view():
+    comic_id = request.args(0)
+    if comic_id is not None:
+        comics = db((db.comic.id == comic_id) & (db.comic.owner_id == auth.user.id)).select()
+        if len(comics)>0:
+            return dict(comics = comics)
+    return dict()
