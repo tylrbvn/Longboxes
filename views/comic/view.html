@@ -1,14 +1,15 @@
 {{extend 'layout.html'}}
 
-<h2>View Comic</h2>
+<h1>View comic:</h1>
 <!--<div class="flash">{{=response.flash or ''}}</div>-->
 <!--Display 5 largest boxes-->
 {{if ('comics' in globals()):}}
     {{for comic in comics:}}
       <!--Full comic view-->
-      <ul>
-        <li><strong>Comic title:</strong> {{=comic.title}}</li>
-      </ul>
+      <h2>{{=comic.title}}</h1>
+      {{if (comic.cover):}}
+        {{=IMG(_src=URL('default', 'download',  args=comic.cover), _width=150)}}
+      </br></br>
       <strong>Issue number:</strong> {{=comic.issue}}</br>
       <strong>Writers:</strong> {{=comic.writers}}</br>
       <strong>Artists:</strong> {{=comic.artists}}</br>
@@ -16,13 +17,10 @@
       {{if (comic.description):}}
         <strong>Description:</strong> {{=comic.description}}</br>
       {{pass}}
-      {{if (comic.cover):}}
-        <strong>Cover art:</strong></br>
-        {{=IMG(_src=URL('default', 'download',  args=comic.cover), _width=150)}}
-      </br>
       {{pass}}
 {{pass}}
 {{else:}}
   {{=H5("There is no comic to display")}}
 {{pass}}
+</br>
 {{=A('Return to collection', _href=URL('collection','index'))}}

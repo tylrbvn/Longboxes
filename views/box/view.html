@@ -1,38 +1,33 @@
 {{extend 'layout.html'}}
-
-<h2>View Box</h2>
 <!--<div class="flash">{{=response.flash or ''}}</div>-->
 <!--Display 5 largest boxes-->
+<h1>View box:</h1>
 {{if ('boxes' in globals()):}}
   {{for box in boxes:}}
-    <ul>
-      <li><strong>Box name:</strong> {{=box.name}}</li>
-    </ul>
+    <h2>{{=box.name}}</h1>
     <strong>Created on:</strong> {{=box.created_on}}</br>
     <strong>Public box:</strong> {{=box.is_public}}</br>
     <strong>Owner id:</strong> {{=box.owner_id}}</br>
-
-    {{for comic in comics:}}
-      <!--Insert comic PREVIEW here-->
-      </br>
-      <ul>
-        <li><strong>Comic title:</strong> {{=comic.comic.title}}</li>
-      </ul>
-      <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
-      <strong>Writers:</strong> {{=comic.comic.writers}}</br>
-      <strong>Artists:</strong> {{=comic.comic.artists}}</br>
-      <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
-      {{if (comic.comic.description):}}
-        <strong>Description:</strong> {{=comic.comic.description}}</br>
+    <h4>Box Contents:</h4>
+    <div style="display: inline-box">
+      {{for comic in comics:}}
+        <div style="display: inline-block">
+          <!--Insert comic PREVIEW here-->
+          <h3>{{=comic.comic.title}}</h3>
+          {{if (comic.comic.cover):}}
+            {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+          {{else:}}
+            {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=150)}}
+          {{pass}}
+          </br></br>
+          <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
+          <strong>Owner:</strong> {{=comic.comic.owner_id}}</br>
+          {{=A('Full information', _href=URL('comic','view', args=[comic.comic.id]))}}
+        </div>
       {{pass}}
-      {{if (comic.comic.cover):}}
-        <strong>Cover art:</strong></br>
-        {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
-      </br>
-      {{pass}}
-  {{pass}}
+    </div>
+  </br>
 {{pass}}
 {{else:}}
   {{=H5("There is no box to display")}}
 {{pass}}
-{{=A('Return to collection', _href=URL('collection','index'))}}
