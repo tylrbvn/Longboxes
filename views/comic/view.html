@@ -30,20 +30,20 @@
         <strong>Description:</strong> {{=comic.comic.description}}</br>
       {{pass}}
     {{pass}}
+    {{if (comic.comic.owner_id == auth.user.id):}}
+    </br>
+    <form action="{{=URL('comic', 'edit', args=[comic.comic.id])}}">
+        <input type="submit" value="Edit Comic">
+    </form>
+    {{else:}}
+    <form action="#">
+      <input type="submit" value="Add to my collection">
+    </form>
+    {{pass}}
 {{else:}}
   {{=H5("There is no comic to display")}}
 {{pass}}
 </br>
-{{if (comic.comic.owner_id == auth.user.id):}}
-<form action="{{=URL('comic', 'edit', args=[comic.comic.id])}}">
-    <input type="submit" value="Edit Comic">
-    <input type="button" value="Go Back" onclick="history.back(-1)" />
-</form>
-{{else:}}
-<form action="#">
-  <input type="submit" value="Add to my collection">
-  <input type="button" value="Go Back" onclick="history.back(-1)" />
-</form>
-{{pass}}
+<input type="button" value="Go Back" onclick="history.back(-1)" />
 </br>
 </br>
