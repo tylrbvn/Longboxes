@@ -6,7 +6,7 @@
 {{if ('comics' in globals()):}}
     {{for comic in comics:}}
       <!--Full comic view-->
-      <h2>{{=comic.comic.title}}</h1>
+      <h2>{{=comic.comic.title}}</h2>
       {{if (comic.comic.cover):}}
         {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
       {{pass}}
@@ -34,6 +34,16 @@
   {{=H5("There is no comic to display")}}
 {{pass}}
 </br>
-<input type="button" value="Go Back" onclick="history.back(-1)" />
+{{if (comic.comic.owner_id == auth.user.id):}}
+<form action="{{=URL('comic', 'edit', args=[comic.comic.id])}}">
+    <input type="submit" value="Edit Comic">
+    <input type="button" value="Go Back" onclick="history.back(-1)" />
+</form>
+{{else:}}
+<form action="#">
+  <input type="submit" value="Add to my collection">
+  <input type="button" value="Go Back" onclick="history.back(-1)" />
+</form>
+{{pass}}
 </br>
 </br>

@@ -24,6 +24,25 @@ def new():
     return dict(addform=form)
 
 @auth.requires_login()
+def edit():
+    #Retrieve comic record using ID
+    record = db.comic(request.args(0))
+    db.comic.id.readable = db.comic.id.writable = False
+    db.comic.owner_id.readable = db.comic.owner_id.writable = False
+    #Check if there exists a comic with ID
+    if(record):
+        #Check user owns that comic
+        if (record.owner_id == auth.user.id):
+            edit=SQLFORM(db.comic, record, deletable=True)
+            if edit.accepts(request,session):
+                response.flash = 'Comic has been successfully updated.'
+            elif edit.errors:
+                response.flash = 'One or more of the entries is incorrect:'
+            return dict(editform=edit)
+    return dict()
+
+
+@auth.requires_login()
 def view():
     comic_id = request.args(0)
     if comic_id is not None:
