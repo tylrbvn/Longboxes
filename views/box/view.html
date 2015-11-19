@@ -35,6 +35,15 @@
 {{else:}}
   {{=H5("There is no box to display")}}
 {{pass}}
-<input type="button" value="Go Back" onclick="history.back(-1)" />
+{{if ((box.box.owner_id == auth.user.id) & (box.box.name != 'Unfiled')):}}
+<form action="{{=URL('box', 'edit', args=[box.box.id])}}">
+    <input type="submit" value="Edit Box">
+    <input type="button" value="Go Back" onclick="history.back(-1)" />
+</form>
+{{else:}}
+<form action="#">
+  <input type="button" value="Go Back" onclick="history.back(-1)" />
+</form>
+{{pass}}
 </br>
 </br>

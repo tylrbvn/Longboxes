@@ -19,7 +19,7 @@
 {{if len(public_boxes)>0:}}
 {{=H5("Your public comic boxes:")}}
 {{for box in public_boxes:}}
-{{=A(box.name, _href=URL('box','view', args=[box.id]))}}
+{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])))}}
 {{pass}}
 {{else:}}
 {{=H5("You have no public boxes")}}
@@ -28,7 +28,7 @@
 <!--Don't need to check if empty as unfiled is always private-->
 <h5>Your private comic boxes:</h5>
 {{for box in private_boxes:}}
-{{=A(box.name, _href=URL('box','view', args=[box.id]))}}
+{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])))}}
 {{pass}}
 
 {{block right_sidebar}}

@@ -33,6 +33,25 @@ def new():
     return dict(addform=form)
 
 @auth.requires_login()
+def edit():
+    #Retrieve comic record using ID
+    record = db.box(request.args(0))
+    db.box.id.readable = db.box.id.writable = False
+    db.box.owner_id.readable = db.box.owner_id.writable = False
+    db.box.created_on.readable = db.box.created_on.writable = False
+    #Check if there exists a box with ID
+    if(record):
+        #Check user owns that box
+        if ((record.owner_id == auth.user.id) & (record.name != 'Unfiled')):
+            edit=SQLFORM(db.box, record, deletable=True) #IF USER DELETES AND COMICS DISPLACED?
+            if edit.accepts(request,session):
+                response.flash = 'Box has been successfully updated.'
+            elif edit.errors:
+                response.flash = 'One or more of the entries is incorrect:'
+            return dict(editform=edit)
+    return dict()
+
+@auth.requires_login()
 def view():
     box_id = request.args(0)
     if box_id is not None:

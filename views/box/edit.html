@@ -1,0 +1,10 @@
+{{extend 'layout.html'}}
+
+<h2>Edit Box</h2>
+<!--<div class="flash">{{=response.flash or ''}}</div>-->
+{{if ('editform' in globals()):}}
+{{=editform}}
+{{else:}}
+{{=H5("You do not have permission to edit this box.")}}
+<input type="button" value="Go Back" onclick="history.back(-1)" />
+{{pass}}
