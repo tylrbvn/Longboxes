@@ -117,10 +117,27 @@ auth.settings.change_password_next = URL('collection', 'index')
 # auth.enable_record_versioning(db)
 
 #comic table
-db.define_table('comic', Field('title', notnull=True), Field('issue', 'integer', notnull=True), Field('writers', 'list:string', notnull=True), Field('artists', 'list:string', notnull=True), Field('publisher', notnull=True), Field('description'), Field('cover', 'upload', autodelete=True), Field('owner_id', 'reference auth_user', notnull=True))
+db.define_table('comic',
+                Field('title', notnull=True, required=True),
+                Field('issue', 'integer', required=True, requires=IS_NOT_EMPTY(error_message="Enter a valid integer")),
+                Field('writers', 'list:string', notnull=True, required=True),
+                Field('artists', 'list:string', notnull=True, required=True),
+                Field('publisher', notnull=True, required=True),
+                Field('description', requires=IS_LENGTH(maxsize = 300, error_message="300 word maximum")),
+                Field('cover', 'upload', autodelete=True, requires=IS_EMPTY_OR(IS_IMAGE(maxsize=(300,400), error_message="Choose an image of 300 x 400 pixels max"))),
+                Field('owner_id', 'reference auth_user', notnull=True, required=True)
+                )
 
 #box table
-db.define_table('box', Field('name', notnull=True), Field('created_on', 'datetime', notnull=True), Field('is_public', 'boolean', default=False), Field('owner_id', 'reference auth_user', notnull=True))
+db.define_table('box',
+                Field('name', notnull=True),
+                Field('created_on', 'datetime', notnull=True),
+                Field('is_public', 'boolean', default=False),
+                Field('owner_id', 'reference auth_user', notnull=True)
+                )
 
 #junction table
-db.define_table('comic_in_box', Field('comic_id', 'reference comic', notnull=True), Field('box_id', 'reference box', notnull=True))
+db.define_table('comic_in_box',
+                Field('comic_id', 'reference comic', notnull=True),
+                Field('box_id', 'reference box', notnull=True)
+                )

@@ -18,7 +18,7 @@ def new():
         unfiled_id = db.box(query).id
         db.comic_in_box.insert(comic_id = form.vars.id, box_id = unfiled_id)
         db.commit
-        response.flash = "New comic '" + form.vars.title + "' successfully created!"
+        response.flash = "New comic '" + form.vars.title + "' has been added to your 'Unfiled' box."
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
