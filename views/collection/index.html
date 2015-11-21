@@ -4,10 +4,7 @@
 {{block header}}
     <header class="container-fluid background">
       <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
+        <h1>{{=response.title}}</h1>
       </div>
     </header>
 {{end}}
