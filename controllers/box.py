@@ -10,29 +10,6 @@ import datetime
 #########################################################################
 
 @auth.requires_login()
-def new():
-    #Form to create a new box
-    form = FORM(DIV(LABEL('Name:', _for='name')),
-                DIV(INPUT(_name='name', requires=IS_NOT_EMPTY())),
-                DIV(LABEL('Public box:', _for='is_public'), INPUT(_name='is_public', _type='checkbox')),
-                DIV(INPUT(_type='submit', _class = "btn btn-primary")))
-    if form.accepts(request, session):
-        query = ((db.box.owner_id == auth.user.id) & (db.box.name == form.vars.name))
-        count = db(query).count()
-        if (count == 0):
-            db.box.insert(name=request.vars.name,
-            is_public=request.vars.is_public,
-            owner_id=auth.user.id,
-            created_on = datetime.datetime.now())
-            db.commit
-            response.flash = "New box '" + form.vars.name + "' successfully created!"
-        else:
-            response.flash = "You already have a box called '" + form.vars.name + "', please enter a new name!"
-    elif form.errors:
-        response.flash = 'One or more of the entries is incorrect:'
-    return dict(addform=form)
-
-@auth.requires_login()
 def add():
     #Retrieve box record using ID
     box = db.box(request.args(0))
@@ -64,25 +41,6 @@ def add():
     return dict()
 
 @auth.requires_login()
-def edit():
-    #Retrieve comic record using ID
-    record = db.box(request.args(0))
-    db.box.id.readable = db.box.id.writable = False
-    db.box.owner_id.readable = db.box.owner_id.writable = False
-    db.box.created_on.readable = db.box.created_on.writable = False
-    #Check if there exists a box with ID
-    if(record):
-        #Check user owns that box, disallow editing of Unfiled box
-        if ((record.owner_id == auth.user.id) & (record.name != 'Unfiled')):
-            edit=SQLFORM(db.box, record)
-            if edit.accepts(request,session):
-                response.flash = 'Box has been successfully updated.'
-            elif edit.errors:
-                response.flash = 'One or more of the entries is incorrect:'
-            return dict(editform=edit)
-    return dict()
-
-@auth.requires_login()
 def delete():
     box = db.box(request.args(0))
     #Check user owns box with ID and not called unfiled
@@ -106,6 +64,48 @@ def delete():
                 response.flash = "Box '" + box.name + "' succesfully deleted!"
             return dict(form = form)
     return dict()
+
+@auth.requires_login()
+def edit():
+    #Retrieve comic record using ID
+    record = db.box(request.args(0))
+    db.box.id.readable = db.box.id.writable = False
+    db.box.owner_id.readable = db.box.owner_id.writable = False
+    db.box.created_on.readable = db.box.created_on.writable = False
+    #Check if there exists a box with ID
+    if(record):
+        #Check user owns that box, disallow editing of Unfiled box
+        if ((record.owner_id == auth.user.id) & (record.name != 'Unfiled')):
+            edit=SQLFORM(db.box, record)
+            if edit.accepts(request,session):
+                response.flash = 'Box has been successfully updated.'
+            elif edit.errors:
+                response.flash = 'One or more of the entries is incorrect:'
+            return dict(editform=edit)
+    return dict()
+
+@auth.requires_login()
+def new():
+    #Form to create a new box
+    form = FORM(DIV(LABEL('Name:', _for='name')),
+                DIV(INPUT(_name='name', requires=IS_NOT_EMPTY())),
+                DIV(LABEL('Public box:', _for='is_public'), INPUT(_name='is_public', _type='checkbox')),
+                DIV(INPUT(_type='submit', _class = "btn btn-primary")))
+    if form.accepts(request, session):
+        query = ((db.box.owner_id == auth.user.id) & (db.box.name == form.vars.name))
+        count = db(query).count()
+        if (count == 0):
+            db.box.insert(name=request.vars.name,
+            is_public=request.vars.is_public,
+            owner_id=auth.user.id,
+            created_on = datetime.datetime.now())
+            db.commit
+            response.flash = "New box '" + form.vars.name + "' successfully created!"
+        else:
+            response.flash = "You already have a box called '" + form.vars.name + "', please enter a new name!"
+    elif form.errors:
+        response.flash = 'One or more of the entries is incorrect:'
+    return dict(addform=form)
 
 @auth.requires_login()
 def view():
