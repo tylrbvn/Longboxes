@@ -31,6 +31,12 @@ def add():
                     db.comic_in_box.insert(comic_id = record.id,
                     box_id = request.vars.box)
                     db.commit
+                    #Check if comic in user's Unfiled box
+                    unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
+                    link = db.comic_in_box((db.comic_in_box.comic_id == record.id) & (db.comic_in_box.box_id == unfiled_id))
+                    #Delete the link
+                    if (link):
+                        db(db.comic_in_box.id == link.id).delete()
                     response.flash = "'" + record.title + "' succesfully added to box"
                 else:
                     response.flash = "Error: Selected box already contains '" + record.title + "'"
