@@ -74,12 +74,18 @@ def edit():
     if(record):
         #Check user owns that box, disallow editing of Unfiled box
         if ((record.owner_id == auth.user.id) & (record.name != 'Unfiled')):
-            edit=SQLFORM(db.box, record, deletable=True) #IF USER DELETES AND COMICS DISPLACED?
+            edit=SQLFORM(db.box, record)
             if edit.accepts(request,session):
                 response.flash = 'Box has been successfully updated.'
             elif edit.errors:
                 response.flash = 'One or more of the entries is incorrect:'
             return dict(editform=edit)
+    return dict()
+
+@auth.requires_login()
+def delete():
+    #Delete box and add displaced comics to Unfiled
+    #Don't allow the deletion of Unfiled or another users box
     return dict()
 
 @auth.requires_login()
