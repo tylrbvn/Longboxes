@@ -132,6 +132,10 @@ def remove():
             #Delete the link
             db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
             response.flash = "'" + comic.title + "' succesfully removed from box '" + box.name + "'"
+        else:
+            response.flash = "You don't have permission to remove this"
+    else:
+        response.flash = "Invalid box or comic selected"
     return dict()
 
 @auth.requires_login()

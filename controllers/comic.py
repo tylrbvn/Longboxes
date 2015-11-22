@@ -11,14 +11,14 @@
 @auth.requires_login()
 def add():
     #Retrieve box record using ID
-    record = db.comic(request.args(0))
+    comic = db.comic(request.args(0))
     #Get list of users comics
     #TODO: Exclude boxes that comic is already in
     boxes = db(db.box.owner_id == auth.user.id).select()
     #Check if there exists a comic with ID
-    if (record):
+    if (comic):
         #Check user owns that comic
-        if (record.owner_id == auth.user.id):
+        if (comic.owner_id == auth.user.id):
             form = FORM(DIV("Select a box: ",
                         SELECT(_name='box',
                         *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))])),
@@ -26,23 +26,23 @@ def add():
                         )
             if form.accepts(request, session):
                 #Ensure comic not already in box
-                count = db((db.comic_in_box.box_id == request.vars.box) & (db.comic_in_box.comic_id == record.id)).count()
+                count = db((db.comic_in_box.box_id == request.vars.box) & (db.comic_in_box.comic_id == comic.id)).count()
                 if (count == 0):
-                    db.comic_in_box.insert(comic_id = record.id,
+                    db.comic_in_box.insert(comic_id = comic.id,
                     box_id = request.vars.box)
                     db.commit
                     #Check if comic in user's Unfiled box
                     unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
-                    link = db.comic_in_box((db.comic_in_box.comic_id == record.id) & (db.comic_in_box.box_id == unfiled_id))
+                    link = db.comic_in_box((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == unfiled_id))
                     #Delete the link
                     if (link):
                         db(db.comic_in_box.id == link.id).delete()
-                    response.flash = "'" + record.title + "' succesfully added to box"
+                    response.flash = "'" + comic.title + "' succesfully added to box"
                 else:
-                    response.flash = "Error: Selected box already contains '" + record.title + "'"
+                    response.flash = "Error: Selected box already contains '" + comic.title + "'"
             elif form.errors:
                 response.flash = 'One or more of the entries is incorrect:'
-            return dict(form = form, comic_name = record.title)
+            return dict(form = form, comic_name = comic.title)
     return dict()
 
 @auth.requires_login()
