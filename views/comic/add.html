@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+{{if ('form' and 'comic_name' in globals()):}}
+<h2>Add '{{=comic_name}}' to a box</h2>
+{{=form}}
+{{else:}}
+{{=H5("You do not have permission to add this comic.")}}
+<input type="button" value="Go Back" onclick="history.back(-1)" />
+{{pass}}

@@ -32,7 +32,7 @@
       {{pass}}
     </br>
     {{if (box.box.owner_id == auth.user.id):}}
-      <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-default">Add Comics</a>
+      <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-default">Add Comic</a>
       {{if (box.box.name != 'Unfiled'):}}
       <a href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">Edit Box</a>
       {{pass}}

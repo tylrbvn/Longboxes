@@ -32,6 +32,7 @@
     {{pass}}
     </br>
     {{if (comic.comic.owner_id == auth.user.id):}}
+    <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-default">Add to a box</a>
     <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit Comic</a>
     {{else:}}
     <a href="#" class = "btn btn-primary">Add to my collection</a>
