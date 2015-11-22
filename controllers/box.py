@@ -35,14 +35,14 @@ def new():
 @auth.requires_login()
 def add():
     #Retrieve box record using ID
-    record = db.box(request.args(0))
+    box = db.box(request.args(0))
     #Get list of users comics
     #TODO: Exclude comics that are already in box
     comics = db(db.comic.owner_id == auth.user.id).select()
     #Check if there exists a box with ID
-    if (record):
+    if (box):
         #Check user owns that box
-        if (record.owner_id == auth.user.id):
+        if ((box.owner_id == auth.user.id) & (box.name != "Unfiled")):
             form = FORM(DIV("Select a comic: ",
                         SELECT(_name='comic',
                         *[OPTION(comics[i].title, _value=str(comics[i].id)) for i in range(len(comics))])),
@@ -50,17 +50,17 @@ def add():
                         )
             if form.accepts(request, session):
                 #Ensure comic not already in box
-                count = db((db.comic_in_box.box_id == record.id) & (db.comic_in_box.comic_id == request.vars.comic)).count()
+                count = db((db.comic_in_box.box_id == box.id) & (db.comic_in_box.comic_id == request.vars.comic)).count()
                 if (count == 0):
                     db.comic_in_box.insert(comic_id = request.vars.comic,
-                    box_id = record.id)
+                    box_id = box.id)
                     db.commit
-                    response.flash = "Comic succesfully added to box '" + record.name + "'"
+                    response.flash = "Comic succesfully added to box '" + box.name + "'"
                 else:
-                    response.flash = "Error: '" + record.name + "' already contains this comic!"
+                    response.flash = "Error: '" + box.name + "' already contains the selected comic!"
             elif form.errors:
                 response.flash = 'One or more of the entries is incorrect:'
-            return dict(form = form, box_name = record.name)
+            return dict(form = form, box_name = box.name)
     return dict()
 
 @auth.requires_login()
