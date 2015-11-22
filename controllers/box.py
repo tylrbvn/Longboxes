@@ -84,8 +84,27 @@ def edit():
 
 @auth.requires_login()
 def delete():
-    #Delete box and add displaced comics to Unfiled
-    #Don't allow the deletion of Unfiled or another users box
+    box = db.box(request.args(0))
+    #Check user owns box with ID and not called unfiled
+    if (box):
+        if ((box.owner_id == auth.user.id) & (box.name != "Unfiled")):
+            form = FORM(DIV("Confirm deletion of box '" + box.name + "':",
+            DIV(INPUT(_type='submit', _value="Delete", _class = "btn btn-danger"))))
+            if form.accepts(request):
+                #Find users Unfiled box id
+                unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
+                #Get list of comics in box
+                records = db(db.comic_in_box.box_id == box.id).select(db.comic_in_box.comic_id)
+                #Add each comic to user's Unfiled box if to be orphaned on box deletion
+                for record in records:
+                    box_count = db(db.comic_in_box.comic_id == record.comic_id).count()
+                    if (box_count < 2):
+                        db.comic_in_box.insert(comic_id = record.comic_id,
+                        box_id = unfiled_id)
+                        db.commit
+                db(db.box.id == box.id).delete()
+                response.flash = "Box '" + box.name + "' succesfully deleted!"
+            return dict(form = form)
     return dict()
 
 @auth.requires_login()

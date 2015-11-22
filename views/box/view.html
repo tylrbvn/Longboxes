@@ -35,6 +35,7 @@
       <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-default">Add Comic</a>
       {{if (box.box.name != 'Unfiled'):}}
       <a href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">Edit Box</a>
+      <a href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-danger">Delete Box</a>
       {{pass}}
     {{pass}}
   {{pass}}
