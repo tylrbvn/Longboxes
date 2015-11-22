@@ -60,6 +60,7 @@ def delete():
                         db.comic_in_box.insert(comic_id = record.comic_id,
                         box_id = unfiled_id)
                         db.commit
+                #Delete the box
                 db(db.box.id == box.id).delete()
                 response.flash = "Box '" + box.name + "' succesfully deleted!"
             return dict(form = form)
@@ -106,6 +107,26 @@ def new():
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
+
+@auth.requires_login()
+def remove():
+    box = db.box(request.args(0))
+    comic = db.comic(request.args(1))
+    if (box and comic):
+        if ((box.owner_id == auth.user.id) & (comic.owner_id == auth.user.id)):
+            #Get list of comics in box
+            box_count = db(db.comic_in_box.comic_id == comic.id).count()
+            if (box_count < 2):
+                #Find users Unfiled box id
+                unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
+                #Add comic to user's Unfiled box if to be orphaned on removal from box
+                db.comic_in_box.insert(comic_id = comic.id,
+                box_id = unfiled_id)
+                db.commit
+            #Delete the link
+            db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
+            response.flash = "'" + comic.title + "' succesfully removed from box '" + box.name + "'"
+    return dict()
 
 @auth.requires_login()
 def view():
