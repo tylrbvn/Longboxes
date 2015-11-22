@@ -9,6 +9,8 @@
       <h2>{{=comic.comic.title}}</h2>
       {{if (comic.comic.cover):}}
         {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+      {{else:}}
+        {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=150)}}
       {{pass}}
       </br></br>
       <strong>Owner:</strong> {{=comic.auth_user.screen_name}}</br>
