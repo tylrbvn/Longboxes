@@ -1,0 +1,30 @@
+{{extend 'layout.html'}}
+<h1>Comic Search:</h1>
+<!--<div class="flash">{{=response.flash or ''}}</div>-->
+{{=form}}
+</br>
+{{if ('results' in globals()):}}
+  {{if (len(results)>0):}}
+    <h4>Search Results:</h4>
+    <div style="display: inline-box">
+    {{for result in results:}}
+      <div style="display: inline-block">
+        <!--Insert comic PREVIEW here-->
+        <h3>{{=result.title}}</h3>
+        {{if (result.cover):}}
+          {{=IMG(_src=URL('default', 'download',  args=result.cover), _width=100)}}
+        {{else:}}
+          {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=100)}}
+        {{pass}}
+        </br></br>
+        <strong>Issue number:</strong> {{=result.issue}}</br>
+        <strong>Owner:</strong> {{=result.owner_id}}</br>
+        {{=A('Full information', _href=URL('comic','view', args=[result.id]))}}
+      </div>
+    {{pass}}
+    </div>
+{{pass}}
+</br>
+<a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
+</br>
+</br>

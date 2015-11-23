@@ -42,7 +42,7 @@ def add():
                 else:
                     response.flash = "Error: '" + box.name + "' already contains the selected comic!"
             elif form.errors:
-                response.flash = 'One or more of the entries is incorrect:'
+                response.flash = 'One or more of the entries is incorrect'
             return dict(form = form, box_name = box.name)
     return dict()
 

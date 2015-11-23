@@ -22,14 +22,14 @@ response.meta.description = "A comic collector's favourite tool."
 ## this is the main application menu add/remove items as required
 #########################################################################
 
-
-
 if auth.is_logged_in():
     response.menu = [
         (T('My Collection'), False, URL('collection', 'index'), []),
+        (T('Search'), False, URL('collection', 'search'), []),
         (T('New Item'), False, None, [
-           (T('Comic'), False, URL('comic', 'new')),
-            (T('Box'), False, URL('box', 'new'))]),
+            (T('Comic'), False, URL('comic', 'new')),
+            (T('Box'), False, URL('box', 'new'))
+            ]),
     ]
 
 if "auth" in locals(): auth.wikimenu()
