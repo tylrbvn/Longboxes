@@ -124,7 +124,7 @@ db.define_table('comic',
                 Field('writers', 'list:string', notnull=True, required=True),
                 Field('artists', 'list:string', notnull=True, required=True),
                 Field('publisher', notnull=True, required=True),
-                Field('description', 'text', requires=IS_LENGTH(maxsize = 300, error_message="300 word maximum")),
+                Field('description', 'text', requires=IS_EXPR('len(value.split())<=300', error_message='Description too long, maximum of 300 words')),
                 Field('cover', 'upload', requires=IS_EMPTY_OR(IS_IMAGE(maxsize=(300,400), error_message="Choose an image of 300 x 400 pixels max"))),
                 Field('owner_id', 'reference auth_user', notnull=True, required=True)
                 )

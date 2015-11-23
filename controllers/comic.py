@@ -129,9 +129,8 @@ def new():
                 DIV(LABEL('Publisher:', _for='title', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "form-control string", _name='publisher', _type="text", requires=IS_NOT_EMPTY()), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Description:', _for='description', _class="control-label col-sm-3"),
-                DIV(TEXTAREA(_class = "text form-control", _name='description', _rows="5", requires=IS_LENGTH(maxsize = 300, error_message="300 word maximum")), _class="col-sm-9"), _class="form-group"),
+                DIV(TEXTAREA(_class = "text form-control", _name='description', _rows="5", requires=IS_EXPR('len(value.split())<=300', error_message='Description too long, maximum of 300 words')), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Cover:', _for='cover', _class="control-label col-sm-3"),
-                #TODO: Fix validation to be 300 words not 300 characters
                 DIV(INPUT(_class = "upload input-file", _name='cover', _type="file", requires=IS_EMPTY_OR(IS_IMAGE(maxsize=(300,400), error_message="Choose an image of 300 x 400 pixels max"))), _class="col-sm-9"), _class="form-group"),
                 DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"), _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
                 _class="form-horizontal")
