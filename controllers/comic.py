@@ -118,6 +118,8 @@ def edit():
 
 @auth.requires_login()
 def new():
+    #Get list of users boxes
+    boxes = db(db.box.owner_id == auth.user.id).select()
     form = FORM(DIV(LABEL('Title:', _for='title', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "form-control string", _name='title', _type="text", requires=IS_NOT_EMPTY()), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Issue:', _for='issue', _class="control-label col-sm-3"),
@@ -132,6 +134,8 @@ def new():
                 DIV(TEXTAREA(_class = "text form-control", _name='description', _rows="5", requires=IS_EXPR('len(value.split())<=300', error_message='Description too long, maximum of 300 words')), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Cover:', _for='cover', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "upload input-file", _name='cover', _type="file", requires=IS_EMPTY_OR(IS_IMAGE(maxsize=(300,400), error_message="Choose an image of 300 x 400 pixels max"))), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Destination:', _for='box', _class="control-label col-sm-3"),
+                DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))], _type="select", _class = "form-control select"), _class="col-sm-9"), _class="form-group"),
                 DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"), _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
                 _class="form-horizontal")
     if form.accepts(request.vars, session):
@@ -145,12 +149,10 @@ def new():
         cover = request.vars.cover,
         owner_id = auth.user_id)
         db.commit
-        #Add to unfiled box by default
-        #TODO: Change to selected box
-        unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
-        db.comic_in_box.insert(comic_id = comic_id, box_id = unfiled_id)
+        #Link comic to selected box
+        db.comic_in_box.insert(comic_id = comic_id, box_id = form.vars.box)
         db.commit
-        response.flash = "New comic '" + form.vars.title + "' has been added to your 'Unfiled' box."
+        response.flash = "New comic '" + form.vars.title + "' has been successfuly created."
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
     return dict(form=form)
