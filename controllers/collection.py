@@ -29,6 +29,16 @@ def index():
     return dict(public_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select(), private_boxes=db((db.box.owner_id==auth.user.id) & ((db.box.is_public == False) | (db.box.is_public == None))).select())
 
 @auth.requires_login()
+def all():
+    boxes = db((db.box.owner_id == auth.user.id) & (auth.user.id == db.auth_user.id)).select()
+    if len(boxes)>0:
+        comics = {}
+        for box in boxes:
+            comics[box.box.id] = db((db.comic_in_box.box_id == box.box.id) & (db.comic_in_box.comic_id == db.comic.id) & (db.comic.owner_id == db.auth_user.id)).select()
+        return dict(boxes = boxes, comics = comics)
+    return dict()
+
+@auth.requires_login()
 def search():
     form = FORM(TABLE(TR(TD(LABEL('Title: ', _for="title")), TD(INPUT(_name='title'))),
             TR(TD(LABEL('Writer: ', _for="writer")), TD(INPUT(_name='writer'))),

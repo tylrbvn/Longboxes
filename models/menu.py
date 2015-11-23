@@ -24,11 +24,14 @@ response.meta.description = "A comic collector's favourite tool."
 
 if auth.is_logged_in():
     response.menu = [
-        (T('My Collection'), False, URL('collection', 'index'), []),
-        (T('Search'), False, URL('collection', 'search'), []),
+        (T('Collection'), False, URL('collection', 'index'), []),
+        (T('Comics'), False, None, [
+            (T('Search'), False, URL('collection', 'search')),
+            (T('View All'), False, URL('collection', 'all'))
+            ]),
         (T('New Item'), False, None, [
-            (T('Comic'), False, URL('comic', 'new')),
-            (T('Box'), False, URL('box', 'new'))
+            (T('Box'), False, URL('box', 'new')),
+            (T('Comic'), False, URL('comic', 'new'))
             ]),
     ]
 
