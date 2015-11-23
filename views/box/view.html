@@ -22,7 +22,7 @@
             {{pass}}
             </br></br>
             <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
-            <strong>Owner:</strong> {{=comic.comic.owner_id}}</br>
+            <strong>Owner:</strong> {{=comic.auth_user.screen_name}}</br>
             {{=A('Full information', _href=URL('comic','view', args=[comic.comic.id]))}}
             {{if ((box.box.owner_id == auth.user.id) & (box.box.name != 'Unfiled')):}}
             {{=A('[Remove]', _href=URL('box','remove', args=[box.box.id, comic.comic.id]))}}

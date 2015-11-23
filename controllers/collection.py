@@ -62,12 +62,12 @@ def search():
                 search_term = (db.comic.publisher.like(publisher_term))
         #Allow for a blank search to return all comics
         #TODO: Disallow for when this search could overload system, i.e. lots of public comics
-        constraint = (db.comic_in_box.box_id == db.box.id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id)) & (db.comic_in_box.comic_id == db.comic.id)
+        constraint = (db.comic_in_box.box_id == db.box.id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id)) & (db.comic_in_box.comic_id == db.comic.id) & (db.comic.owner_id == db.auth_user.id)
         if (search_term):
             search_term =  search_term & constraint
         else:
             search_term = constraint
-        results = db(search_term).select(db.comic.id, db.comic.title, db.comic.cover, db.comic.issue, db.comic.owner_id)
+        results = db(search_term).select()
         #Output success indicated by number of result(s)
         output = "Search complete: " + str(len(results)) + " result"
         if(len(results) != 1): output += "s"
