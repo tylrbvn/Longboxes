@@ -46,6 +46,40 @@ def add():
     return dict()
 
 @auth.requires_login()
+def copy():
+    comic_id = request.args(0)
+    #Ensure that the comic to be copied is in another user's public box
+    count = db((db.comic_in_box.comic_id == comic_id) & (db.comic_in_box.box_id == db.box.id) & (db.box.is_public == True) & (db.box.owner_id != auth.user.id)).count()
+    if (count > 0):
+        #Get the comic to be copied
+        comic = db.comic(comic_id)
+
+        #Get list of user's boxes
+        boxes = db(db.box.owner_id == auth.user.id).select()
+        form = FORM(DIV("Select a box: ",
+                    SELECT(_name='box',
+                    *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))])),
+                    DIV(INPUT(_type='submit', _value="Add", _class = "btn btn-primary"))
+                    )
+        if form.accepts(request, session):
+            #Make a copy of the comic and get ID
+            comic_id = db.comic.insert(title = comic.title,
+            issue = comic.issue,
+            writers = comic.writers,
+            artists = comic.artists,
+            publisher = comic.publisher,
+            description = comic.description,
+            cover = comic.cover,
+            owner_id = auth.user.id)
+            #Add to box selected in form
+            db.comic_in_box.insert(comic_id = comic_id,
+            box_id = request.vars.box)
+            db.commit
+            response.flash = "'" + comic.title + "' successfully copied to your collection"
+        return dict(form=form, comic_title = comic.title)
+    return dict()
+
+@auth.requires_login()
 def edit():
     #Retrieve comic record using ID
     record = db.comic(request.args(0))

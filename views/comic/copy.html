@@ -1,0 +1,9 @@
+{{extend 'layout.html'}}
+{{if ('form' and 'comic_title' in globals()):}}
+<h2>Copy '{{=comic_title}}' to your collection</h2>
+{{=form}}
+{{else:}}
+{{=H5("You do not have permission to copy this comic.")}}
+{{pass}}
+</br>
+<a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
