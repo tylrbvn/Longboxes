@@ -38,7 +38,7 @@ def add():
                     #Delete the link
                     if (link):
                         db(db.comic_in_box.id == link.id).delete()
-                    response.flash = "Comic succesfully added to box '" + box.name + "'"
+                    response.flash = "Comic successfully added to box '" + box.name + "'"
                 else:
                     response.flash = "Error: '" + box.name + "' already contains the selected comic!"
             elif form.errors:
@@ -68,7 +68,7 @@ def delete():
                         db.commit
                 #Delete the box
                 db(db.box.id == box.id).delete()
-                session.message = "Box '" + box.name + "' succesfully deleted!"
+                session.message = "Box '" + box.name + "' successfully deleted!"
                 redirect(URL('collection', 'index'))
             return dict(form = form)
     return dict()
@@ -130,11 +130,11 @@ def remove():
                 db.comic_in_box.insert(comic_id = comic.id,
                 box_id = unfiled_id)
                 db.commit
-                session.message = "'" + comic.title + "' succesfully moved to your 'Unfiled' box"
+                session.message = "'" + comic.title + "' successfully moved to your 'Unfiled' box"
             #Delete the link
             db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
             if not session.message:
-                session.message = "'" + comic.title + "' succesfully removed from box '" + box.name + "'"
+                session.message = "'" + comic.title + "' successfully removed from box '" + box.name + "'"
             redirect(URL('box', 'view', args=[box.id]))
         else:
             response.flash = "You don't have permission to remove this"

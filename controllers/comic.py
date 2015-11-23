@@ -15,7 +15,7 @@ def form():
 def add():
     #Retrieve box record using ID
     comic = db.comic(request.args(0))
-    #Get list of users comics
+    #Get list of users boxes
     #TODO: Exclude boxes that comic is already in
     boxes = db(db.box.owner_id == auth.user.id).select()
     #Check if there exists a comic with ID
@@ -40,7 +40,7 @@ def add():
                     #Delete the link
                     if (link):
                         db(db.comic_in_box.id == link.id).delete()
-                    response.flash = "'" + comic.title + "' succesfully added to box"
+                    response.flash = "'" + comic.title + "' successfully added to box"
                 else:
                     response.flash = "Error: Selected box already contains '" + comic.title + "'"
             elif form.errors:
@@ -93,7 +93,7 @@ def delete():
             if form.accepts(request):
                 #Delete the comic
                 db(db.comic.id == comic.id).delete()
-                session.message = "Comic '" + comic.title + "' succesfully deleted!"
+                session.message = "Comic '" + comic.title + "' successfully deleted!"
                 redirect(URL('collection', 'index'))
             return dict(form = form)
     return dict()
