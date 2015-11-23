@@ -112,18 +112,17 @@ def new():
         response.flash = 'One or more of the entries is incorrect:'
     return dict(addform=form)
 
-@auth.requires_login()
 def view():
     comic_id = request.args(0)
     if comic_id is not None:
         #If own comic
-        comics = db((db.comic.id == comic_id) & (db.comic.owner_id == auth.user.id) & (db.comic.owner_id == db.auth_user.id)).select()
-        if len(comics)>0:
-            return dict(comics = comics)
-        else:
-            #  If a comic from another user's public box
-            public = db((db.comic_in_box.comic_id == comic_id) & (db.comic_in_box.box_id == db.box.id) & (db.box.is_public == True)).select()
-            if len(public)>0:
-                comics = db((db.comic.id == comic_id) & (db.comic.owner_id == db.auth_user.id)).select()
+        if auth.is_logged_in():
+            comics = db((db.comic.id == comic_id) & (db.comic.owner_id == auth.user.id) & (db.comic.owner_id == db.auth_user.id)).select()
+            if len(comics)>0:
                 return dict(comics = comics)
+        #If a comic from another user's public box
+        public = db((db.comic_in_box.comic_id == comic_id) & (db.comic_in_box.box_id == db.box.id) & (db.box.is_public == True)).select()
+        if len(public)>0:
+            comics = db((db.comic.id == comic_id) & (db.comic.owner_id == db.auth_user.id)).select()
+            return dict(comics = comics)
     return dict()

@@ -33,14 +33,16 @@
       {{pass}}
     {{pass}}
     </br>
+    {{if auth.is_logged_in():}}
     {{if (comic.comic.owner_id == auth.user.id):}}
     <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">Add to a box</a>
     <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit Comic</a>
     {{else:}}
     <a href={{=URL('comic', 'copy', args=[comic.comic.id])}} class = "btn btn-primary">Add to my collection</a>
     {{pass}}
+    {{pass}}
 {{else:}}
-  {{=H5("There is no comic to display")}}
+  {{=H5("You do not have permission to view this comic")}}
 {{pass}}
 <a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
 </br>
