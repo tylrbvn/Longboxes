@@ -95,6 +95,7 @@ auth.settings.login_next = URL('collection', 'index')
 auth.settings.profile_next = URL('collection', 'index')
 auth.settings.register_next = URL('collection', 'index')
 auth.settings.change_password_next = URL('collection', 'index')
+auth.settings.actions_disabled = ['retrieve_username', 'request_reset_password']
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
