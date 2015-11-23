@@ -29,7 +29,7 @@ if auth.is_logged_in():
             (T('Search'), False, URL('collection', 'search')),
             (T('View All'), False, URL('collection', 'all'))
             ]),
-        (T('New Item'), False, None, [
+        (T('New'), False, None, [
             (T('Box'), False, URL('box', 'new')),
             (T('Comic'), False, URL('comic', 'new'))
             ]),

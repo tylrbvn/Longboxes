@@ -8,6 +8,9 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+def form():
+    return dict()
+
 @auth.requires_login()
 def add():
     #Retrieve box record using ID
@@ -115,18 +118,42 @@ def edit():
 
 @auth.requires_login()
 def new():
-    db.comic.owner_id.readable = db.comic.owner_id.writable = False
-    form = SQLFORM(db.comic)
-    form.vars.owner_id = auth.user.id
+    form = FORM(DIV(LABEL('Title:', _for='title', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='title', _type="text"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Issue:', _for='issue', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "integer form-control", _name='issue', _type="text"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Writers:', _for='writers', _class="control-label col-sm-3"),
+                DIV(UL(LI(INPUT(_name="writers", _type="text", _class="form-control string")), _class="w2p_list", _style="list-style:none"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Artists:', _for='artists', _class="control-label col-sm-3"),
+                DIV(UL(LI(INPUT(_name="artists", _type="text", _class="form-control string")), _class="w2p_list", _style="list-style:none"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Publisher:', _for='title', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='publisher', _type="text"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Description:', _for='description', _class="control-label col-sm-3"),
+                DIV(TEXTAREA(_class = "text form-control", _name='description', _rows="5"), _class="col-sm-9"), _class="form-group"),
+                DIV(LABEL('Cover:', _for='cover', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "upload input-file", _name='cover', _type="file"), _class="col-sm-9"), _class="form-group"),
+                DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"), _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
+                _class="form-horizontal")
     if form.accepts(request.vars, session):
-        query = (db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')
-        unfiled_id = db.box(query).id
-        db.comic_in_box.insert(comic_id = form.vars.id, box_id = unfiled_id)
+        #Insert comic and get ID
+        comic_id = db.comic.insert(title = request.vars.title,
+        issue = request.vars.issue,
+        writers = request.vars.writers,
+        artists = request.vars.artists,
+        publisher = request.vars.publisher,
+        description = request.vars.description,
+        cover = request.vars.cover,
+        owner_id = auth.user_id)
+        db.commit
+        #Add to unfiled box by default
+        #TODO: Change to selected box
+        unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
+        db.comic_in_box.insert(comic_id = comic_id, box_id = unfiled_id)
         db.commit
         response.flash = "New comic '" + form.vars.title + "' has been added to your 'Unfiled' box."
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
-    return dict(addform=form)
+    return dict(form=form)
 
 def view():
     comic_id = request.args(0)
