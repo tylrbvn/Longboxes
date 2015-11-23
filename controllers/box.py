@@ -68,7 +68,8 @@ def delete():
                         db.commit
                 #Delete the box
                 db(db.box.id == box.id).delete()
-                response.flash = "Box '" + box.name + "' succesfully deleted!"
+                session.message = "Box '" + box.name + "' succesfully deleted!"
+                redirect(URL('collection', 'index'))
             return dict(form = form)
     return dict()
 
@@ -129,9 +130,12 @@ def remove():
                 db.comic_in_box.insert(comic_id = comic.id,
                 box_id = unfiled_id)
                 db.commit
+                session.message = "'" + comic.title + "' succesfully moved to your 'Unfiled' box"
             #Delete the link
             db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
-            response.flash = "'" + comic.title + "' succesfully removed from box '" + box.name + "'"
+            if not session.message:
+                session.message = "'" + comic.title + "' succesfully removed from box '" + box.name + "'"
+            redirect(URL('box', 'view', args=[box.id]))
         else:
             response.flash = "You don't have permission to remove this"
     else:
@@ -140,6 +144,9 @@ def remove():
 
 def view():
     box_id = request.args(0)
+    if (session.message):
+        response.flash = session.message
+        session.message = None
     if box_id is not None:
         if auth.is_logged_in():
             boxes = db((db.box.id == box_id) & ((db.box.is_public == True) | (db.box.owner_id == auth.user.id)) & (db.box.owner_id == db.auth_user.id)).select()

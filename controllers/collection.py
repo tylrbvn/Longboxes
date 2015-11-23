@@ -26,6 +26,10 @@ def index():
         owner_id=auth.user.id,
         created_on = datetime.datetime.now())
         db.commit
+    #Display any necessary message
+    if (session.message):
+        response.flash = session.message
+        session.message = None
     return dict(public_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select(), private_boxes=db((db.box.owner_id==auth.user.id) & ((db.box.is_public == False) | (db.box.is_public == None))).select())
 
 @auth.requires_login()
