@@ -36,10 +36,13 @@
     {{if auth.is_logged_in():}}
     {{if (comic.comic.owner_id == auth.user.id):}}
     <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">Add to a box</a>
-    <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit Comic</a>
+    <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit comic</a>
+    <a href={{=URL('comic','delete', args=[comic.comic.id])}} class = "btn btn-default">Delete comic</a>
     {{else:}}
     <a href={{=URL('comic', 'copy', args=[comic.comic.id])}} class = "btn btn-primary">Add to my collection</a>
     {{pass}}
+    </br>
+    </br>
     {{pass}}
 {{else:}}
   {{=H5("You do not have permission to view this comic")}}

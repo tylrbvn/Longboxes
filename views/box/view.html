@@ -26,7 +26,8 @@
             {{=A('Full information', _href=URL('comic','view', args=[comic.comic.id]))}}
             {{if auth.is_logged_in():}}
             {{if ((box.box.owner_id == auth.user.id) & (box.box.name != 'Unfiled')):}}
-            {{=A('[Remove]', _href=URL('box','remove', args=[box.box.id, comic.comic.id]))}}
+            </br>
+            <a class="small" href={{=URL('box','remove', args=[box.box.id, comic.comic.id])}}>[Remove]</a>
             {{pass}}
             {{pass}}
           </div>
@@ -38,9 +39,11 @@
     </br>
     {{if auth.is_logged_in():}}
     {{if ((box.box.owner_id == auth.user.id) & (box.box.name != 'Unfiled')):}}
-      <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-default">Add Comic</a>
-      <a href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">Edit Box</a>
-      <a href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-danger">Delete Box</a>
+      <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-primary">Add a comic</a>
+      <a href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">Edit box</a>
+      <a href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-default">Delete box</a>
+      </br>
+      </br>
     {{pass}}
     {{pass}}
   {{pass}}

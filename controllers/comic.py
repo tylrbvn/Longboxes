@@ -42,7 +42,7 @@ def add():
                     response.flash = "Error: Selected box already contains '" + comic.title + "'"
             elif form.errors:
                 response.flash = 'One or more of the entries is incorrect:'
-            return dict(form = form, comic_name = comic.title)
+            return dict(form = form, comic = comic)
     return dict()
 
 @auth.requires_login()
@@ -77,6 +77,22 @@ def copy():
             db.commit
             response.flash = "'" + comic.title + "' successfully copied to your collection"
         return dict(form=form, comic_title = comic.title)
+    return dict()
+
+@auth.requires_login()
+def delete():
+    comic = db.comic(request.args(0))
+    #Check user owns box with ID and not called unfiled
+    if (comic):
+        if (comic.owner_id == auth.user.id):
+            form = FORM(DIV("Confirm deletion of comic '" + comic.title + "':",
+            DIV(INPUT(_type='submit', _value="Delete", _class = "btn btn-danger"))))
+            if form.accepts(request):
+                #Delete the comic
+                db(db.comic.id == comic.id).delete()
+                session.message = "Comic '" + comic.title + "' succesfully deleted!"
+                redirect(URL('collection', 'index'))
+            return dict(form = form)
     return dict()
 
 @auth.requires_login()

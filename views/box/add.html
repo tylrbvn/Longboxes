@@ -1,9 +1,10 @@
 {{extend 'layout.html'}}
-{{if ('form' and 'box_name' in globals()):}}
-<h2>Add comic to '{{=box_name}}' box</h2>
+{{if ('form' and 'box' in globals()):}}
+<h2>Add comic to '{{=box.name}}' box</h2>
 {{=form}}
+</br>
+<a href={{=URL('box', 'view', args=[box.id])}} class="btn btn-default">Return to box</a>
 {{else:}}
 {{=H5("You do not have permission to add to this box.")}}
-{{pass}}
-</br>
 <a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
+{{pass}}

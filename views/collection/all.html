@@ -4,11 +4,11 @@
 <h1>Your comics:</h1>
 {{if ('boxes' in globals()):}}
   {{for box in boxes:}}
+  {{if (len(comics[box.box.id])>0):}}
     <h2><a href={{=URL('box', 'view', args=[box.box.id])}}>{{=box.box.name}}</a></h1>
     <h5>by {{=box.auth_user.screen_name}}</h5>
     <strong>Created on:</strong> {{=box.box.created_on}}</br>
     <strong>Public box:</strong> {{=box.box.is_public}}</br>
-      {{if (len(comics)>0):}}
         <h4>Box Contents:</h4>
         <div style="display: inline-box">
         {{for comic in comics[box.box.id]:}}
@@ -27,10 +27,8 @@
           </div>
         {{pass}}
         </div>
-      {{else:}}
-      <h4>Box is empty!</h4>
-      {{pass}}
     </br>
+  {{pass}}
   {{pass}}
 {{else:}}
   {{=H5("There is no box to display")}}
