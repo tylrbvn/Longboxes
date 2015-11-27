@@ -6,7 +6,7 @@
 #########################################################################
 
 response.title = "Longboxes"
-response.logo = A(B(response.title + ' 📦'),
+response.logo = A(B(response.title),
                   _class="navbar-brand",_href=URL('default', 'index'),
                   _id="web2py-logo")
 
