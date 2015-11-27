@@ -1,7 +1,5 @@
 {{extend 'layout.html'}}
-
 <h1>View comic:</h1>
-<!--<div class="flash">{{=response.flash or ''}}</div>-->
 <!--Display 5 largest boxes-->
 {{if ('comics' in globals()):}}
     {{for comic in comics:}}
@@ -33,20 +31,26 @@
       {{pass}}
     {{pass}}
     </br>
+    <!--Display links to add to a box, edit or delete the comic,
+    if comic belongs to user-->
     {{if auth.is_logged_in():}}
     {{if (comic.comic.owner_id == auth.user.id):}}
-    <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">Add to a box</a>
-    <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit comic</a>
-    <a href={{=URL('comic','delete', args=[comic.comic.id])}} class = "btn btn-default">Delete comic</a>
+    <div>
+      <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">Add to a box</a>
+      <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit comic</a>
+      <a href={{=URL('comic','delete', args=[comic.comic.id])}} class = "btn btn-default">Delete comic</a>
+    </div>
+    <!--Display link to add to own collection if comic belongs
+    to another user-->
     {{else:}}
     <a href={{=URL('comic', 'copy', args=[comic.comic.id])}} class = "btn btn-primary">Add to my collection</a>
     {{pass}}
-    </br>
     </br>
     {{pass}}
 {{else:}}
   {{=H5("You do not have permission to view this comic")}}
 {{pass}}
-<a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
 </br>
-</br>
+<div>
+  <a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
+</div>
