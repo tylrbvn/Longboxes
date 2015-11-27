@@ -23,14 +23,30 @@ def add():
         #Check user owns that comic
         if (comic.owner_id == auth.user.id):
             #Form that displays list of comics titles but returns comic ID
-            form = FORM(DIV(LABEL('Select a box:', _for='box', _class="control-label col-sm-3"),
-                        DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))],
-                        _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
-                        DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
-                        A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
-                        _class="col-sm-9 col-sm-offset-3"),
-                        _class="form-group"),
-                        _class="form-horizontal")
+            #Check if comic in user's Unfiled box
+            unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
+            link = db.comic_in_box((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == unfiled_id))
+            if (link):
+                form = FORM(DIV(LABEL('Select a box:', _for='box', _class="control-label col-sm-3"),
+                            DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))],
+                            _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
+                            DIV(LABEL("Remove from Unfiled box:", _for='unfiled', _class="control-label col-sm-3"),
+                            DIV(INPUT(_name='unfiled', _checked="checked", _type="checkbox",
+                            _class = "boolean", _value="on"), _class="col-sm-4"), _class = "form-group"),
+                            DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
+                            A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
+                            _class="col-sm-9 col-sm-offset-3"),
+                            _class="form-group"),
+                            _class="form-horizontal")
+            else:
+                form = FORM(DIV(LABEL('Select a box:', _for='box', _class="control-label col-sm-3"),
+                            DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))],
+                            _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
+                            DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
+                            A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
+                            _class="col-sm-9 col-sm-offset-3"),
+                            _class="form-group"),
+                            _class="form-horizontal")
 
             if form.accepts(request, session):
                 #Ensure comic not already in box
@@ -39,11 +55,8 @@ def add():
                     db.comic_in_box.insert(comic_id = comic.id,
                     box_id = request.vars.box)
                     db.commit
-                    #Check if comic in user's Unfiled box
-                    unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
-                    link = db.comic_in_box((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == unfiled_id))
                     #Delete the link
-                    if (link):
+                    if (link and request.vars.unfiled):
                         db(db.comic_in_box.id == link.id).delete()
                     response.flash = "'" + comic.title + "' successfully added to box"
                 else:

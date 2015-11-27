@@ -37,12 +37,6 @@ def add():
                     db.comic_in_box.insert(comic_id = request.vars.comic,
                     box_id = box.id)
                     db.commit
-                    #Check if comic in user's Unfiled box
-                    unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
-                    link = db.comic_in_box((db.comic_in_box.comic_id == request.vars.comic) & (db.comic_in_box.box_id == unfiled_id))
-                    #Delete the link
-                    if (link):
-                        db(db.comic_in_box.id == link.id).delete()
                     response.flash = "Comic successfully added to box '" + box.name + "'"
                 else:
                     response.flash = "Error: '" + box.name + "' already contains the selected comic!"
@@ -57,7 +51,6 @@ def delete():
     #Check user owns box with ID and not called unfiled
     if (box):
         if ((box.owner_id == auth.user.id) & (box.name != "Unfiled")):
-
             form = FORM(DIV(LABEL('Confirm box deletion:', _for='submit', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "btn btn-danger", _value='Delete', _type="submit"),
                 A('Cancel', _href=URL('box', 'view', args=box.id), _class = "btn btn-default"),
@@ -144,9 +137,11 @@ def remove():
     comic = db.comic(request.args(1))
     if (box and comic):
         if ((box.owner_id == auth.user.id) & (comic.owner_id == auth.user.id)):
-            #Get list of comics in box
+            #Delete the link
+            db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
+            #Get count of boxes comic is in
             box_count = db(db.comic_in_box.comic_id == comic.id).count()
-            if (box_count < 2):
+            if (box_count == 0):
                 #Find users Unfiled box id
                 unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
                 #Add comic to user's Unfiled box if to be orphaned on removal from box
@@ -154,8 +149,6 @@ def remove():
                 box_id = unfiled_id)
                 db.commit
                 session.message = "'" + comic.title + "' successfully moved to your 'Unfiled' box"
-            #Delete the link
-            db((db.comic_in_box.comic_id == comic.id) & (db.comic_in_box.box_id == box.id)).delete()
             if not session.message:
                 session.message = "'" + comic.title + "' successfully removed from box '" + box.name + "'"
             redirect(URL('box', 'view', args=[box.id]))
