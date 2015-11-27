@@ -20,11 +20,16 @@ def add():
     if (box):
         #Check user owns that box
         if ((box.owner_id == auth.user.id) & (box.name != "Unfiled")):
-            form = FORM(DIV("Select a comic: ",
-                        SELECT(_name='comic',
-                        *[OPTION(comics[i].title, _value=str(comics[i].id)) for i in range(len(comics))])),
-                        DIV(INPUT(_type='submit', _value="Add", _class = "btn btn-primary"))
-                        )
+            #Form that displays list of comics titles but returns comic ID
+            form = FORM(DIV(LABEL('Select a comic:', _for='comic', _class="control-label col-sm-3"),
+                        DIV(SELECT(_name='comic', *[OPTION(comics[i].title, _value=str(comics[i].id)) for i in range(len(comics))],
+                        _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
+                        DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
+                        A('Cancel', _href=URL('box', 'view', args=box.id), _class = "btn btn-default"),
+                        _class="col-sm-9 col-sm-offset-3"),
+                        _class="form-group"),
+                        _class="form-horizontal")
+
             if form.accepts(request, session):
                 #Ensure comic not already in box
                 count = db((db.comic_in_box.box_id == box.id) & (db.comic_in_box.comic_id == request.vars.comic)).count()
@@ -52,8 +57,14 @@ def delete():
     #Check user owns box with ID and not called unfiled
     if (box):
         if ((box.owner_id == auth.user.id) & (box.name != "Unfiled")):
-            form = FORM(DIV("Confirm deletion of box '" + box.name + "':",
-            DIV(INPUT(_type='submit', _value="Delete", _class = "btn btn-danger"))))
+
+            form = FORM(DIV(LABEL('Confirm box deletion:', _for='submit', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "btn btn-danger", _value='Delete', _type="submit"),
+                A('Cancel', _href=URL('box', 'view', args=box.id), _class = "btn btn-default"),
+                 _class="col-sm-9"),
+                _class="form-group"),
+                _class="form-horizontal")
+
             if form.accepts(request):
                 #Find users Unfiled box id
                 unfiled_id = db.box((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).id
@@ -95,16 +106,28 @@ def edit():
 @auth.requires_login()
 def new():
     #Form to create a new box
-    form = FORM(DIV(LABEL('Name:', _for='name')),
-                DIV(INPUT(_name='name', requires=IS_NOT_EMPTY())),
-                DIV(LABEL('Public box:', _for='is_public'), INPUT(_name='is_public', _type='checkbox')),
-                DIV(INPUT(_type='submit', _class = "btn btn-primary")))
+    form = FORM(DIV(LABEL('Name:', _for='name', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='name', _type="text", requires=IS_NOT_EMPTY()), _class="col-sm-3"),
+                _class="form-group"),
+                DIV(LABEL('Privacy:', _for='privacy', _class="control-label col-sm-3"),
+                DIV(SELECT(_name='privacy', *['Public', 'Private'], _class = "form-control select"), _class="col-sm-2"),
+                _class = "form-group"),
+                DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"),
+                A('Cancel', _onclick="history.back(-1)", _class = "btn btn-default"),
+                _class="col-sm-9 col-sm-offset-3"),
+                _class="form-group"),
+                _class="form-horizontal")
+
     if form.accepts(request, session):
         query = ((db.box.owner_id == auth.user.id) & (db.box.name == form.vars.name))
         count = db(query).count()
         if (count == 0):
+            if (request.vars.privacy == 'Public'):
+                public = True
+            else:
+                public = False
             db.box.insert(name=request.vars.name,
-            is_public=request.vars.is_public,
+            is_public=public,
             owner_id=auth.user.id,
             created_on = datetime.datetime.now())
             db.commit
@@ -113,7 +136,7 @@ def new():
             response.flash = "You already have a box called '" + form.vars.name + "', please enter a new name!"
     elif form.errors:
         response.flash = 'One or more of the entries is incorrect:'
-    return dict(addform=form)
+    return dict(form=form)
 
 @auth.requires_login()
 def remove():

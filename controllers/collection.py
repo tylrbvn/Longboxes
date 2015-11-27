@@ -44,12 +44,22 @@ def all():
 
 @auth.requires_login()
 def search():
-    form = FORM(TABLE(TR(TD(LABEL('Title: ', _for="title")), TD(INPUT(_name='title'))),
-            TR(TD(LABEL('Writer: ', _for="writer")), TD(INPUT(_name='writer'))),
-            TR(TD(LABEL('Artist: ', _for="artist")), TD(INPUT(_name='artist'))),
-            TR(TD(LABEL('Publisher: ', _for="publisher")), TD(INPUT(_name='publisher'))),
-            TR(DIV(INPUT(_type='submit', _class='btn btn-primary', _value='Search')))
-            ))
+    form = FORM(DIV(LABEL('Title:', _for='title', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='title', _type="text"), _class="col-sm-3"),
+                _class="form-group"),
+                DIV(LABEL('Writer:', _for='writer', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='writer', _type="text"), _class="col-sm-3"),
+                _class="form-group"),
+                DIV(LABEL('Artist:', _for='artist', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='artist', _type="text"), _class="col-sm-3"),
+                _class="form-group"),
+                DIV(LABEL('Publisher:', _for='publisher', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "form-control string", _name='publisher', _type="text"), _class="col-sm-3"),
+                _class="form-group"),
+                DIV(DIV(INPUT(_class = "btn btn-primary", _value='Search', _type="submit"),
+                _class="col-sm-9 col-sm-offset-3"),
+                _class="form-group"),
+                _class="form-horizontal")
 
     if form.accepts(request, session):
         search_term = ""

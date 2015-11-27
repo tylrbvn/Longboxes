@@ -22,11 +22,16 @@ def add():
     if (comic):
         #Check user owns that comic
         if (comic.owner_id == auth.user.id):
-            form = FORM(DIV("Select a box: ",
-                        SELECT(_name='box',
-                        *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))])),
-                        DIV(INPUT(_type='submit', _value="Add", _class = "btn btn-primary"))
-                        )
+            #Form that displays list of comics titles but returns comic ID
+            form = FORM(DIV(LABEL('Select a box:', _for='box', _class="control-label col-sm-3"),
+                        DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))],
+                        _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
+                        DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
+                        A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
+                        _class="col-sm-9 col-sm-offset-3"),
+                        _class="form-group"),
+                        _class="form-horizontal")
+
             if form.accepts(request, session):
                 #Ensure comic not already in box
                 count = db((db.comic_in_box.box_id == request.vars.box) & (db.comic_in_box.comic_id == comic.id)).count()
@@ -59,11 +64,15 @@ def copy():
 
         #Get list of user's boxes
         boxes = db(db.box.owner_id == auth.user.id).select()
-        form = FORM(DIV("Select a box: ",
-                    SELECT(_name='box',
-                    *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))])),
-                    DIV(INPUT(_type='submit', _value="Add", _class = "btn btn-primary"))
-                    )
+        form = FORM(DIV(LABEL('Select a box:', _for='box', _class="control-label col-sm-3"),
+                    DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))],
+                    _class = "form-control select"), _class="col-sm-4"), _class = "form-group"),
+                    DIV(DIV(INPUT(_class = "btn btn-primary", _value='Add to box', _type="submit"),
+                    A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
+                    _class="col-sm-9 col-sm-offset-3"),
+                    _class="form-group"),
+                    _class="form-horizontal")
+
         if form.accepts(request, session):
             #Make a copy of the comic and get ID
             comic_id = db.comic.insert(title = comic.title,
@@ -85,11 +94,16 @@ def copy():
 @auth.requires_login()
 def delete():
     comic = db.comic(request.args(0))
-    #Check user owns box with ID and not called unfiled
+    #Check user owns comic with ID
     if (comic):
         if (comic.owner_id == auth.user.id):
-            form = FORM(DIV("Confirm deletion of comic '" + comic.title + "':",
-            DIV(INPUT(_type='submit', _value="Delete", _class = "btn btn-danger"))))
+            form = FORM(DIV(LABEL('Confirm comic deletion:', _for='submit', _class="control-label col-sm-3"),
+                DIV(INPUT(_class = "btn btn-danger", _value='Delete', _type="submit"),
+                A('Cancel', _href=URL('comic', 'view', args=comic.id), _class = "btn btn-default"),
+                 _class="col-sm-9"),
+                _class="form-group"),
+                _class="form-horizontal")
+
             if form.accepts(request):
                 #Delete the comic
                 db(db.comic.id == comic.id).delete()
@@ -136,8 +150,11 @@ def new():
                 DIV(INPUT(_class = "upload input-file", _name='cover', _type="file", requires=IS_EMPTY_OR(IS_IMAGE(maxsize=(300,400), error_message="Choose an image of 300 x 400 pixels max"))), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Destination:', _for='box', _class="control-label col-sm-3"),
                 DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))], _type="select", _class = "form-control select"), _class="col-sm-9"), _class="form-group"),
-                DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"), _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
+                DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"),
+                A('Cancel', _onclick="history.back(-1)", _class = "btn btn-default"),
+                _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
                 _class="form-horizontal")
+
     if form.accepts(request.vars, session):
         #Insert comic and get ID
         comic_id = db.comic.insert(title = request.vars.title,

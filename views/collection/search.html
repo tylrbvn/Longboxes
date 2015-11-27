@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
 <h1>Comic Search</h1>
-<!--<div class="flash">{{=response.flash or ''}}</div>-->
 {{=form}}
 </br>
 {{if ('results' in globals()):}}
@@ -23,8 +22,8 @@
       </div>
     {{pass}}
     </div>
+    </br>
+    <a href={{=URL('collection', 'index')}} class="btn btn-default">Back to collection</a>
+    </br>
+    </br>
 {{pass}}
-</br>
-<a href={{=URL('collection', 'index')}} class="btn btn-default">Go to collection</a>
-</br>
-</br>

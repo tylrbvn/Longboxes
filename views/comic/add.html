@@ -2,8 +2,6 @@
 {{if ('form' and 'comic' in globals()):}}
 <h2>Add '{{=comic.title}}' to a box</h2>
 {{=form}}
-</br>
-<a href={{=URL('comic', 'view', args=[comic.id])}} class="btn btn-default">Return to comic</a>
 {{else:}}
 {{=H5("You do not have permission to add this comic.")}}
 <a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
