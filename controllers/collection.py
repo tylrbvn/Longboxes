@@ -92,12 +92,19 @@ def search():
         else:
             search_term = constraint
         results = db(search_term).select()
-        #Output success indicated by number of result(s)
-        output = "Search complete: " + str(len(results)) + " result"
-        if(len(results) != 1): output += "s"
+        #Filter out duplicate results caused by comics being in public boxes
+        #Not able to get select query do this due to complexity in use of distinct
+        distinct = dict()
+        for result in results:
+            if result.comic.id not in distinct:
+                distinct[result.comic.id] = result.comic_in_box.id
+        #Output success indicated by number of distinct result(s)
+        output = "Search complete: " + str(len(distinct)) + " result"
+        if(len(distinct) != 1): output += "s"
         response.flash = output
     else:
         if form.errors:
             response.flash = 'One or more of the entries is incorrect'
         results = dict()
-    return dict(form = form, results = results)
+        distinct = dict()
+    return dict(form = form, results = results, distinct = distinct)

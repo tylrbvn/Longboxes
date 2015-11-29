@@ -6,6 +6,9 @@
     <h4>Search Results:</h4>
     <div style="display: inline-box">
     {{for result in results:}}
+      <!--Filter out duplicate results caused by comics being in
+      public boxes-->
+      {{if (result.comic_in_box.id in distinct.values()):}}
       <div style="display: inline-block">
         <!--Insert comic PREVIEW here-->
         <h3>{{=result.comic.title}}</h3>
@@ -19,6 +22,7 @@
         <strong>Owner:</strong> {{=result.auth_user.screen_name}}</br>
         {{=A('Full information', _href=URL('comic','view', args=[result.comic.id]))}}
       </div>
+      {{pass}}
     {{pass}}
     </div>
     </br>
