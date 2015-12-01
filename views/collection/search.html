@@ -1,5 +1,12 @@
 {{extend 'layout.html'}}
-<h1>Comic Search</h1>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1>Search</h1>
+  </div>
+  <div class="panel-body">
+    Search for comics from your collection or from other users' public collections!
+  </div>
+</div>
 {{=form}}
 {{if ('results' in globals()):}}
   {{if (len(results)>0):}}

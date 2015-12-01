@@ -106,7 +106,6 @@ def new():
                 DIV(SELECT(_name='privacy', *['Public', 'Private'], _class = "form-control select"), _class="col-sm-2"),
                 _class = "form-group"),
                 DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"),
-                A('Cancel', _onclick="history.back(-1)", _class = "btn btn-default"),
                 _class="col-sm-9 col-sm-offset-3"),
                 _class="form-group"),
                 _class="form-horizontal")

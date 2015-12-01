@@ -149,7 +149,7 @@ def new():
     boxes = db(db.box.owner_id == auth.user.id).select()
     form = FORM(DIV(LABEL('Title:', _for='title', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "form-control string", _name='title', _type="text", requires=IS_NOT_EMPTY()), _class="col-sm-9"), _class="form-group"),
-                DIV(LABEL('Issue:', _for='issue', _class="control-label col-sm-3"),
+                DIV(LABEL('Issue number:', _for='issue', _class="control-label col-sm-3"),
                 DIV(INPUT(_class = "integer form-control", _name='issue', _type="text", requires=IS_NOT_EMPTY()), _class="col-sm-9"), _class="form-group"),
                 DIV(LABEL('Writers:', _for='writers', _class="control-label col-sm-3"),
                 DIV(UL(LI(INPUT(_name="writers", _type="text", _class="form-control string", requires=IS_NOT_EMPTY())), _class="w2p_list", _style="list-style:none"), _class="col-sm-9"), _class="form-group"),
@@ -164,7 +164,6 @@ def new():
                 DIV(LABEL('Destination:', _for='box', _class="control-label col-sm-3"),
                 DIV(SELECT(_name='box', *[OPTION(boxes[i].name, _value=str(boxes[i].id)) for i in range(len(boxes))], _type="select", _class = "form-control select"), _class="col-sm-9"), _class="form-group"),
                 DIV(DIV(INPUT(_class = "btn btn-primary", _value='Submit', _type="submit"),
-                A('Cancel', _onclick="history.back(-1)", _class = "btn btn-default"),
                 _class="col-sm-9 col-sm-offset-3"), _class="form-group"),
                 _class="form-horizontal")
 
