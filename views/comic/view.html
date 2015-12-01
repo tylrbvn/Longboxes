@@ -32,8 +32,7 @@
             <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
           </p>
           {{if (comic.comic.description):}}
-          <p><strong>Description:</strong></p>
-          <p>{{=comic.comic.description}}</p>
+          <p><strong>Description:</strong> {{=comic.comic.description}}</p>
           {{pass}}
           <p><strong>Owner:</strong> {{=comic.auth_user.screen_name}}</p>
         </div>
