@@ -17,7 +17,7 @@
 
 <!--Check if the user has any public boxes and display-->
 {{if len(public_boxes)>0:}}
-  <h4>Your public comic boxes:</h4>
+  <h4>Your public boxes:</h4>
   <div class="row">
     {{for box in public_boxes:}}
       {{include 'sub/box_preview.html'}}
@@ -32,7 +32,7 @@
 {{pass}}
 
 <!--Don't need to check if empty as unfiled is always private-->
-<h4>Your private comic boxes:</h4>
+<h4>Your private boxes:</h4>
 <div class="row">
   {{for box in private_boxes:}}
     {{include 'sub/box_preview.html'}}
