@@ -3,7 +3,7 @@
   {{for box in boxes:}}
     <div class="panel panel-default">
       <div class="panel-heading">
-          <h2>{{=box.box.name}}
+          <h2 title='Created: {{=str(box.box.created_on.strftime("%H:%M %d %h %y"))}}'>{{=box.box.name}}
             <span class="label label-default">
               {{if (box.box.is_public):}}
                 Public

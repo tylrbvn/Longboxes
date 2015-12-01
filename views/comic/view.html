@@ -1,52 +1,67 @@
 {{extend 'layout.html'}}
-<h1>View comic:</h1>
 <!--Display 5 largest boxes-->
 {{if ('comics' in globals()):}}
     {{for comic in comics:}}
-      <!--Full comic view-->
-      <h2>{{=comic.comic.title}}</h2>
-      {{if (comic.comic.cover):}}
-        {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
-      {{else:}}
-        {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=150)}}
-      {{pass}}
-      </br></br>
-      <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
-      <strong>Writers:</strong>
-      <ul>
-      {{for writer in comic.comic.writers:}}
-        <li>{{=writer}}</li>
-      {{pass}}
-      </ul>
-        <strong>Artists:</strong>
-      <ul>
-      {{for artist in comic.comic.artists:}}
-        <li>{{=artist}}</li>
-      {{pass}}
-      </ul>
-      <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
-      {{if (comic.comic.description):}}
-        <strong>Description:</strong> {{=comic.comic.description}}</br>
-      {{pass}}
-      <strong>Owner:</strong> {{=comic.auth_user.screen_name}}</br>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <!--Comic preview subview that is used in box/view and collection/all-->
+        <div class="media">
+          <div class="media-left media-middle">
+              {{if (comic.comic.cover):}}
+                <img class="media-object" src="{{=URL('default', 'download',  args=comic.comic.cover)}}">
+              {{else:}}
+                <img class="media-object" src="{{=URL('static', 'images',  args='no-cover.jpg')}}">
+              {{pass}}
+          </div>
+        <div class="media-body" style="padding-left:2em">
+          <h1 class="media-heading">{{=comic.comic.title}}</h1>
+          <p><strong>Issue number:</strong> {{=comic.comic.issue}}</p>
+          <p><strong>Writers:</strong></p>
+          <ul>
+          {{for writer in comic.comic.writers:}}
+            <li>{{=writer}}</li>
+          {{pass}}
+          </ul>
+          <p><strong>Artists:</strong></p>
+          <ul>
+          {{for artist in comic.comic.artists:}}
+            <li>{{=artist}}</li>
+          {{pass}}
+          </ul>
+          <p>
+            <strong>Publisher:</strong> {{=comic.comic.publisher}}</br>
+          </p>
+          {{if (comic.comic.description):}}
+          <p><strong>Description:</strong></p>
+          <p>{{=comic.comic.description}}</p>
+          {{pass}}
+          <p><strong>Owner:</strong> {{=comic.auth_user.screen_name}}</p>
+        </div>
+      </div>
     {{pass}}
-    </br>
+    </div>
     <!--Display links to add to a box, edit or delete the comic,
     if comic belongs to user-->
     {{if auth.is_logged_in():}}
-    {{if (comic.comic.owner_id == auth.user.id):}}
-    <div>
-      <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">Add to a box</a>
-      <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">Edit comic</a>
-      <a href={{=URL('comic','delete', args=[comic.comic.id])}} class = "btn btn-default">Delete comic</a>
+    <div class="panel-footer">
+      {{if (comic.comic.owner_id == auth.user.id):}}
+      <div class="btn-group" role="group">
+        <a href={{=URL('comic','add', args=[comic.comic.id])}} class = "btn btn-primary">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add to a box</a>
+        <a href={{=URL('comic','edit', args=[comic.comic.id])}} class = "btn btn-default">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit comic</a>
+        <a href={{=URL('comic','delete', args=[comic.comic.id])}} class = "btn btn-default">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete comic</a>
+      </div>
+      <!--Display link to add to own collection if comic belongs
+      to another user-->
+      {{else:}}
+      <a href={{=URL('comic', 'copy', args=[comic.comic.id])}} class = "btn btn-primary">
+      <span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy to my collection</a>
+      {{pass}}
     </div>
-    <!--Display link to add to own collection if comic belongs
-    to another user-->
-    {{else:}}
-    <a href={{=URL('comic', 'copy', args=[comic.comic.id])}} class = "btn btn-primary">Add to my collection</a>
     {{pass}}
-    </br>
-    {{pass}}
+</div>
 {{else:}}
   {{=H5("You do not have permission to view this comic")}}
 {{pass}}
