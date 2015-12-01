@@ -8,23 +8,16 @@
     <h2><a href={{=URL('box', 'view', args=[box.box.id])}}>{{=box.box.name}}</a></h1>
     <h5>by {{=box.auth_user.screen_name}}</h5>
     <strong>Created on:</strong> {{=box.box.created_on}}</br>
-    <strong>Public box:</strong> {{=box.box.is_public}}</br>
-        <h4>Box Contents:</h4>
+    <strong>Privacy:</strong>
+    {{if (box.box.is_public):}}
+      Public
+    {{else:}}
+      Private
+    {{pass}}
+        <h4>Contents:</h4>
         <div style="display: inline-box">
         {{for comic in comics[box.box.id]:}}
-          <div style="display: inline-block">
-            <!--Insert comic PREVIEW here-->
-            <h3>{{=comic.comic.title}}</h3>
-            {{if (comic.comic.cover):}}
-              {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=100)}}
-            {{else:}}
-              {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=100)}}
-            {{pass}}
-            </br></br>
-            <strong>Issue number:</strong> {{=comic.comic.issue}}</br>
-            <strong>Owner:</strong> {{=comic.auth_user.screen_name}}</br>
-            {{=A('Full information', _href=URL('comic','view', args=[comic.comic.id]))}}
-          </div>
+        {{include 'comic_preview.html'}}
         {{pass}}
         </div>
     </br>
