@@ -29,7 +29,6 @@ def add():
                         _class="col-sm-9 col-sm-offset-3"),
                         _class="form-group"),
                         _class="form-horizontal")
-
             if form.accepts(request, session):
                 #Ensure comic not already in box
                 count = db((db.comic_in_box.box_id == box.id) & (db.comic_in_box.comic_id == request.vars.comic)).count()
@@ -42,7 +41,7 @@ def add():
                     response.flash = "Error: '" + box.name + "' already contains the selected comic!"
             elif form.errors:
                 response.flash = 'One or more of the entries is incorrect'
-            return dict(form = form, box = box)
+            return dict(form = form, box = box, no_of_comics = len(comics))
     return dict()
 
 @auth.requires_login()

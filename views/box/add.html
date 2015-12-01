@@ -1,7 +1,14 @@
 {{extend 'layout.html'}}
-{{if ('form' and 'box' in globals()):}}
+{{if ('form' and 'box' and 'no_of_comics' in globals()):}}
 <h2>Add comic to '{{=box.name}}' box</h2>
+{{if (no_of_comics>0):}}
 {{=form}}
+{{else:}}
+<div class="alert alert-danger" role="alert">
+  <strong>There are no comics to add.</strong>
+  <a href="{{=URL('comic', 'new')}}" class="alert-link">Click here</a> to create your first comic!</a>
+</div>
+{{pass}}
 {{else:}}
 {{=H5("You do not have permission to add to this box.")}}
 {{pass}}

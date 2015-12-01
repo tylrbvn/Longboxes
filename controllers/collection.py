@@ -12,14 +12,9 @@ import datetime
 @auth.requires_login()
 def index():
     """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
+    Main logged in homepage, displays users collection
     """
     #If user doesn't have an Unfiled box, create one
-    #This ideally would be triggered after registration
     if (db((db.box.owner_id == auth.user.id) & (db.box.name == 'Unfiled')).count()==0):
         db.box.insert(name='Unfiled',
         is_public='False',
@@ -30,7 +25,13 @@ def index():
     if (session.message):
         response.flash = session.message
         session.message = None
-    return dict(public_boxes=db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select(), private_boxes=db((db.box.owner_id==auth.user.id) & ((db.box.is_public == False) | (db.box.is_public == None))).select())
+    #Find users pubic boxes
+    public = db((db.box.owner_id==auth.user.id) & (db.box.is_public == True)).select()
+    #Find users private boxes
+    private = db((db.box.owner_id==auth.user.id) & (db.box.is_public != True)).select()
+    #Find how many comics user has, to offer assistance
+    no_of_comics = db(db.comic.owner_id == auth.user.id).count()
+    return dict(public_boxes = public, private_boxes = private, no_of_comics = no_of_comics)
 
 @auth.requires_login()
 def all():

@@ -14,7 +14,13 @@
     Your boxes are displayed below, grouped by privacy setting. Select a box to view and edit its contents.
   </div>
 </div>
-
+{{if (no_of_comics == 0):}}
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Welcome {{=auth.user.screen_name}}, we've noticed that you don't have any comics yet!</strong>
+  <a href="{{=URL('comic', 'new')}}" class="alert-link">Click here</a> to create your first comic.</a>
+</div>
+{{pass}}
 <!--Check if the user has any public boxes and display-->
 {{if len(public_boxes)>0:}}
   <h4>Your public boxes:</h4>
@@ -24,13 +30,15 @@
     {{pass}}
   </div>
 {{else:}}
+  <!--Only display if previous alert not displayed, so not to bombard new users with alerts-->
+  {{if (no_of_comics > 0):}}
   <div class="alert alert-info alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <strong>You don't have any public boxes.</strong>
     <a href="{{=URL('box', 'new')}}" class="alert-link">Create one</a> and start sharing content!</a>
   </div>
+  {{pass}}
 {{pass}}
-
 <!--Don't need to check if empty as unfiled is always private-->
 <h4>Your private boxes:</h4>
 <div class="row">
