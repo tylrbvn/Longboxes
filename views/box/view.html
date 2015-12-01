@@ -1,43 +1,44 @@
 {{extend 'layout.html'}}
-<h1>View box:</h1>
 {{if ('boxes' in globals()):}}
   {{for box in boxes:}}
-    <h2>{{=box.box.name}}</h1>
-    <h5>by {{=box.auth_user.screen_name}}</h5>
-    <strong>Created:</strong> {{=box.box.created_on}}</br>
-    <strong>Privacy:</strong>
-    {{if (box.box.is_public):}}
-      Public
-    {{else:}}
-      Private
-    {{pass}}
-      {{if (len(comics)>0):}}
-        <h4>Contents:</h4>
-        <div class="row">
-          {{for comic in comics:}}
-            {{include 'sub/comic_preview.html'}}
-          {{pass}}
-        </div>
-      {{else:}}
-      <h4>Box is empty!</h4>
-      {{pass}}
-    <!--Display links to add a comic to, edit or delete the box, if the box belongs
-    to user and isn't unfiled-->
-    {{if auth.is_logged_in():}}
-    {{if ((box.box.owner_id == auth.user.id) & (box.box.name != 'Unfiled')):}}
-      </br>
-      <div>
-        <a href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-primary">Add a comic</a>
-        <a href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">Edit box</a>
-        <a href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-default">Delete box</a>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <h2>{{=box.box.name}}
+            <span class="label label-default">
+              {{if (box.box.is_public):}}
+                Public
+              {{else:}}
+                Private
+              {{pass}}
+            </span>
+          </h2>
+          <h5>by {{=box.auth_user.screen_name}}</h5>
       </div>
-    {{pass}}
+      <!--Display controls to add a comic to, edit or delete the box, if the box belongs
+      to user and isn't unfiled-->
+      {{if auth.is_logged_in() and (box.box.owner_id == auth.user.id) and (box.box.name != 'Unfiled'):}}
+      <div class="panel-body">
+        <div class="btn-group" role="group">
+          <a class="btn btn-primary", href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-primary">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add comic</a>
+          <a class="btn btn-default", href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit box</a>
+          <a class="btn btn-default", href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-default">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete box</a>
+        </div>
+      </div>
+      {{pass}}
+    </div>
+    {{if (len(comics)>0):}}
+      <div class="row">
+        {{for comic in comics:}}
+          {{include 'sub/comic_preview.html'}}
+        {{pass}}
+      </div>
+    {{else:}}
+    <h4>Box is empty!</h4>
     {{pass}}
   {{pass}}
 {{else:}}
   {{=H5("There is no box to display")}}
 {{pass}}
-</br>
-<div>
-  <a href="button" onclick="history.back(-1)" class="btn btn-default">Go back</a>
-</div>

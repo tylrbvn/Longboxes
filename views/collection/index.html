@@ -1,23 +1,20 @@
 {{right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
+<!--<p class="lead"></p>-->
 {{block header}}
     <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        <h1>{{=response.title}}</h1>
-      </div>
+      <div class="jumbotron text-center"></div>
     </header>
 {{end}}
-
-
-<!--<p class="lead"></p>-->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h2 class="panel-title">Your personal Longbox</h2>
+    <h1>Your collection</h1>
   </div>
   <div class="panel-body">
     Your boxes are displayed below, grouped by privacy setting. Select a box to view and edit its contents.
   </div>
 </div>
+
 <!--Check if the user has any public boxes and display-->
 {{if len(public_boxes)>0:}}
   <h4>Your public comic boxes:</h4>
