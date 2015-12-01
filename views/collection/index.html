@@ -1,16 +1,17 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-{{block header}}
-    <header class="container-fluid background">
+
+{{'''block header'''}}
+<!--    <header class="container-fluid background">
       <div class="jumbotron text-center">
         <h1>{{=response.title}}</h1>
       </div>
-    </header>
-{{end}}
+    </header> -->
+{{'''end'''}}
 
-<h2>Welcome to your personal Longbox!</h2>
-<p class="lead">{{=T('Your online comic collection.')}}</p>
+<h2>Your personal Longbox collection:</h2>
+<p class="lead"></p>
 
 <!--Check if the user has any public boxes and display-->
 {{if len(public_boxes)>0:}}
