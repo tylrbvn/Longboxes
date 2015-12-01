@@ -15,12 +15,11 @@
       Private
     {{pass}}
         <h4>Contents:</h4>
-        <div style="display: inline-box">
-        {{for comic in comics[box.box.id]:}}
-        {{include 'comic_preview.html'}}
-        {{pass}}
+        <div class="row">
+          {{for comic in comics[box.box.id]:}}
+            {{include 'sub/comic_preview.html'}}
+          {{pass}}
         </div>
-    </br>
   {{pass}}
   {{pass}}
 {{else:}}

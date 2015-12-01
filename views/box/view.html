@@ -11,13 +11,12 @@
     {{else:}}
       Private
     {{pass}}
-    </br>
       {{if (len(comics)>0):}}
         <h4>Contents:</h4>
-        <div style="display: inline-box">
-        {{for comic in comics:}}
-          {{include 'comic_preview.html'}}
-        {{pass}}
+        <div class="row">
+          {{for comic in comics:}}
+            {{include 'sub/comic_preview.html'}}
+          {{pass}}
         </div>
       {{else:}}
       <h4>Box is empty!</h4>

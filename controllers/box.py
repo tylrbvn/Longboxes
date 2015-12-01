@@ -170,5 +170,5 @@ def view():
             boxes = db((db.box.id == box_id) & (db.box.is_public == True) & (db.box.owner_id == db.auth_user.id)).select()
         if len(boxes)>0:
             comics = db((db.comic_in_box.box_id == box_id) & (db.comic_in_box.comic_id == db.comic.id) & (db.comic.owner_id == db.auth_user.id)).select()
-            return dict(boxes = boxes, comics = comics)
+            return dict(boxes = boxes, comics = comics, removal = True)
     return dict()

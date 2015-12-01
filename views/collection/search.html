@@ -4,24 +4,12 @@
 {{if ('results' in globals()):}}
   {{if (len(results)>0):}}
     <h4>Search Results:</h4>
-    <div style="display: inline-box">
-    {{for result in results:}}
+    <div class="row">
+    {{for comic in results:}}
       <!--Filter out duplicate results caused by comics being in
       public boxes-->
-      {{if (result.comic_in_box.id in distinct.values()):}}
-      <div style="display: inline-block">
-        <!--Insert comic PREVIEW here-->
-        <h3>{{=result.comic.title}}</h3>
-        {{if (result.comic.cover):}}
-          {{=IMG(_src=URL('default', 'download',  args=result.comic.cover), _width=100)}}
-        {{else:}}
-          {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=100)}}
-        {{pass}}
-        </br></br>
-        <strong>Issue number:</strong> {{=result.comic.issue}}</br>
-        <strong>Owner:</strong> {{=result.auth_user.screen_name}}</br>
-        {{=A('Full information', _href=URL('comic','view', args=[result.comic.id]))}}
-      </div>
+      {{if (comic.comic_in_box.id in distinct.values()):}}
+        {{include 'sub/comic_preview.html'}}
       {{pass}}
     {{pass}}
     </div>

@@ -1,0 +1,16 @@
+<!--Comic preview subview that is used in box/view and collection/all-->
+<div class="col-sm-6 col-md-2">
+  <div class="thumbnail">
+    {{if (comic.comic.cover):}}
+      {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+    {{else:}}
+      {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=150)}}
+    {{pass}}
+    <div class="caption">
+      <h3>{{=comic.comic.title}}</h3>
+      <p><strong>Issue number:</strong> {{=comic.comic.issue}}</p>
+      <p><strong>Owner:</strong> {{=comic.auth_user.screen_name}}</p>
+      <p>{{include 'sub/comic_controls.html'}}</p>
+    </div>
+  </div>
+</div>

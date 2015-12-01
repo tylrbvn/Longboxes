@@ -1,0 +1,18 @@
+<!--If the page should allow removing comics from boxes, i.e. box/view,
+then include those controls where appropriate, which is:
+  When the user is logged in
+  AND
+  The user owns the box
+  AND
+  That box is not their unfiled box OR the comic is already in another box
+-->
+{{if ('removal' in globals()) and auth.is_logged_in()  and (box.box.owner_id == auth.user.id) & ((box.box.name != "Unfiled") | (db(db.comic_in_box.comic_id == comic.comic.id).count() > 1)):}}
+  <!--Give controls to view full info and remove the comic from the box-->
+  <div class="btn-group" role="group">
+    <a class="btn btn-default btn-sm", role="button", href={{=URL('comic','view', args=[comic.comic.id])}}>Full information</a>
+    <a class="btn btn-danger btn-sm", role="button", href={{=URL('box','remove', args=[box.box.id, comic.comic.id])}}>Remove</a>
+  </div>
+{{else:}}
+  <!--Else just give control to view full info-->
+  <a class="btn btn-default btn-sm", role="button", href={{=URL('comic','view', args=[comic.comic.id])}}>Full information</a>
+{{pass}}
