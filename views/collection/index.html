@@ -1,19 +1,21 @@
 {{right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-{{'''block header'''}}
-<!--    <header class="container-fluid background">
+{{block header}}
+    <header class="container-fluid background">
       <div class="jumbotron text-center">
         <h1>{{=response.title}}</h1>
       </div>
-    </header> -->
-{{'''end'''}}
+    </header>
+{{end}}
 
-<h2>Your personal Longbox</h2>
+
 <!--<p class="lead"></p>-->
-
 <div class="panel panel-default">
+  <div class="panel-heading">
+    <h2 class="panel-title">Your personal Longbox</h2>
+  </div>
   <div class="panel-body">
-    Your boxes are displayed below, seperated by their privacy settings. Click on a box to view its contents!
+    Your boxes are displayed below, grouped by privacy setting. Select a box to view and edit its contents.
   </div>
 </div>
 <!--Check if the user has any public boxes and display-->
@@ -25,7 +27,11 @@
     {{pass}}
   </div>
 {{else:}}
-  <h5>You have no public boxes</h5>
+  <div class="alert alert-info alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>You don't have any public boxes.</strong>
+    <a href="{{=URL('box', 'new')}}" class="alert-link">Create one</a> and start sharing content!</a>
+  </div>
 {{pass}}
 
 <!--Don't need to check if empty as unfiled is always private-->
