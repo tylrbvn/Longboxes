@@ -10,21 +10,12 @@ import datetime
 #########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-
     #Get the 5 largest public boxes
     count = db.comic_in_box.box_id.count()  #What we are counting, the number of comics in each box
-    #Perform the joint query
-    largest_boxes = db((db.box.id==db.comic_in_box.box_id) & (db.box.is_public==True)).select(db.box.name, db.box.id, count, groupby=db.comic_in_box.box_id, orderby=~count, limitby=(0,5))
-
-    #Get the 5 newest public boxes
-    newest_boxes=db(db.box.is_public == True).select(orderby=~db.box.created_on, limitby=(0, 5))
+    #Perform the joint query and get info about owner
+    largest_boxes = db((db.box.id==db.comic_in_box.box_id) & (db.box.is_public==True) & (db.box.owner_id == db.auth_user.id)).select(db.box.name, db.box.id, db.auth_user.screen_name, count, groupby=db.comic_in_box.box_id, orderby=~count, limitby=(0,5))
+    #Get the 5 newest public boxes and info about owner
+    newest_boxes=db((db.box.is_public == True) & (db.box.owner_id == db.auth_user.id)).select(orderby=~db.box.created_on, limitby=(0, 5))
     return dict(newest_boxes=newest_boxes,largest_boxes=largest_boxes)
 
 def user():

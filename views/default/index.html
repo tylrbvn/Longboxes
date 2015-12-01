@@ -1,6 +1,4 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
 {{block header}}
     <header class="container-fluid background">
       <div class="jumbotron text-center">
@@ -8,46 +6,49 @@
       </div>
     </header>
 {{end}}
-
 <h2>Welcome to Longboxes!</h2>
-<p class="lead">{{=T("A comic collector's favourite tool.")}}</p>
-
+<p class="lead">A comic collector's favourite tool.</p>
 <!--Display 5 largest boxes-->
 {{if len(largest_boxes)>0:}}
-<h5>Largest public boxes:</h5>
-{{for box in largest_boxes:}}
-{{=DIV(A(box.box.name, _href=URL('box','view', args=[box.box.id])),' (' + str(box._extra['COUNT(comic_in_box.box_id)']) + ' comics)')}}
-{{pass}}
+  <h5>Largest public boxes:</h5>
+  <div class="row">
+  {{for box in largest_boxes:}}
+    <a href={{=URL('box','view', args=[box.box.id])}}>
+      <div class="col-sm-6 col-md-4">
+      <div class="thumbnail" style="text-align:center">
+          <div class="caption">
+            <span style="font-size:4em" class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
+              <h2>{{=box.box.name}}</h2>
+              <h5>by {{=box.auth_user.screen_name}}</h5>
+              <h4><span class="label label-default">{{=str(box._extra['COUNT(comic_in_box.box_id)'])}} comics</span></h4>
+          </div>
+        </div>
+      </div>
+    </a>
+  {{pass}}
+  </div>
 {{else:}}
-{{=H5("There are no large public boxes to display")}}
+  <h5>There are no large public boxes to display</h5>
 {{pass}}
-
 <!--Display 5 newest boxes-->
 {{if len(newest_boxes)>0:}}
-<h5>Newest public boxes:</h5>
-{{for box in newest_boxes:}}
-{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])),' (Created: ' + str(box.created_on) + ')')}}
-{{pass}}
-{{else:}}
-{{=H5("There are no new public boxes to display")}}
-{{pass}}
-
-{{block right_sidebar}}
-<!--
-<div class="panel panel-info">
-  <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
-      href="{{=URL('admin','default','index')}}">
-      <i class="glyphicon glyphicon-cog"></i>
-      {{=T("admin")}}
-    </a></h3></div>
-  <div class="panel-body">
-    {{=T("Don't know what to do?")}}
+  <h5>Newest public boxes:</h5>
+  <div class="row">
+  {{for box in newest_boxes:}}
+    <a href={{=URL('box','view', args=[box.box.id])}}>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail" style="text-align:center">
+          <div class="caption">
+            <span style="font-size:4em" class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
+              <h2>{{=box.box.name}}</h2>
+              <h4>by {{=box.auth_user.screen_name}}</h4>
+              <h4><span class="label label-default">{{=str(box.box.created_on.strftime("%H:%M %d %h %y"))}}</span></h4>
+          </div>
+        </div>
+      </div>
+    </a>
+  {{pass}}
   </div>
-  <ul class="list-group">
-    <li class="list-group-item">{{=A(T("Online examples"), _href=URL('examples','default','index'))}}</li>
-    <li class="list-group-item"><a href="http://web2py.com">web2py.com</a></li>
-    <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
-  </ul>
-</div>
--->
-{{end}}
+{{else:}}
+  <h5>There are no new public boxes to display</h5>
+{{pass}}
