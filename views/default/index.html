@@ -14,7 +14,7 @@
 
 <!--Display 5 largest boxes-->
 {{if len(largest_boxes)>0:}}
-{{=H5("Largest public boxes:")}}
+<h5>Largest public boxes:</h5>
 {{for box in largest_boxes:}}
 {{=DIV(A(box.box.name, _href=URL('box','view', args=[box.box.id])),' (' + str(box._extra['COUNT(comic_in_box.box_id)']) + ' comics)')}}
 {{pass}}
@@ -24,7 +24,7 @@
 
 <!--Display 5 newest boxes-->
 {{if len(newest_boxes)>0:}}
-{{=H5("Newest public boxes:")}}
+<h5>Newest public boxes:</h5>
 {{for box in newest_boxes:}}
 {{=DIV(A(box.name, _href=URL('box','view', args=[box.id])),' (Created: ' + str(box.created_on) + ')')}}
 {{pass}}

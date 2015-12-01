@@ -1,11 +1,13 @@
 <!--Comic preview subview that is used in box/view and collection/all-->
 <div class="col-sm-6 col-md-2">
   <div class="thumbnail">
+    <a href="{{=URL('comic','view', args=[comic.comic.id])}}">
     {{if (comic.comic.cover):}}
-      {{=IMG(_src=URL('default', 'download',  args=comic.comic.cover), _width=150)}}
+      <img src="{{=URL('default', 'download',  args=comic.comic.cover)}}", width=150>
     {{else:}}
-      {{=IMG(_src=URL('static', 'images',  args='no-cover.jpg'), _width=150)}}
+      <img src="{{=URL('static', 'images',  args='no-cover.jpg')}}", width=150>
     {{pass}}
+    </a>
     <div class="caption">
       <h3>{{=comic.comic.title}}</h3>
       <p><strong>Issue number:</strong> {{=comic.comic.issue}}</p>

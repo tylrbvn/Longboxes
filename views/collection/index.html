@@ -1,7 +1,5 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
-
 {{'''block header'''}}
 <!--    <header class="container-fluid background">
       <div class="jumbotron text-center">
@@ -10,24 +8,33 @@
     </header> -->
 {{'''end'''}}
 
-<h2>Your personal Longbox collection:</h2>
-<p class="lead"></p>
+<h2>Your personal Longbox</h2>
+<!--<p class="lead"></p>-->
 
+<div class="panel panel-default">
+  <div class="panel-body">
+    Your boxes are displayed below, seperated by their privacy settings. Click on a box to view its contents!
+  </div>
+</div>
 <!--Check if the user has any public boxes and display-->
 {{if len(public_boxes)>0:}}
-{{=H5("Your public comic boxes:")}}
-{{for box in public_boxes:}}
-{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])))}}
-{{pass}}
+  <h4>Your public comic boxes:</h4>
+  <div class="row">
+    {{for box in public_boxes:}}
+      {{include 'sub/box_preview.html'}}
+    {{pass}}
+  </div>
 {{else:}}
-{{=H5("You have no public boxes")}}
+  <h5>You have no public boxes</h5>
 {{pass}}
 
 <!--Don't need to check if empty as unfiled is always private-->
-<h5>Your private comic boxes:</h5>
-{{for box in private_boxes:}}
-{{=DIV(A(box.name, _href=URL('box','view', args=[box.id])))}}
-{{pass}}
+<h4>Your private comic boxes:</h4>
+<div class="row">
+  {{for box in private_boxes:}}
+    {{include 'sub/box_preview.html'}}
+  {{pass}}
+</div>
 
 {{block right_sidebar}}
 <!--
