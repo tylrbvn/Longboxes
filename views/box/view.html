@@ -19,11 +19,11 @@
       {{if auth.is_logged_in() and (box.box.owner_id == auth.user.id) and (box.box.name != 'Unfiled'):}}
       <div class="panel-body">
         <div class="btn-group" role="group">
-          <a class="btn btn-primary", href={{=URL('box','add', args=[box.box.id])}} class = "btn btn-primary">
+          <a class="btn btn-primary", href={{=URL('box','add', args=[box.box.id])}}>
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add comic</a>
-          <a class="btn btn-default", href={{=URL('box','edit', args=[box.box.id])}} class = "btn btn-default">
-          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit box</a>
-          <a class="btn btn-default", href={{=URL('box','delete', args=[box.box.id])}} class = "btn btn-default">
+          <a class="btn btn-default", href={{=URL('box','edit', args=[box.box.id])}}>
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit box</a>
+          <a class="btn btn-default", href={{=URL('box','delete', args=[box.box.id])}}>
           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete box</a>
         </div>
       </div>
@@ -36,7 +36,13 @@
         {{pass}}
       </div>
     {{else:}}
-    <h4>Box is empty!</h4>
+    <div class="alert alert-danger" role="alert">
+      <strong>This box is empty.</strong>
+      {{if auth.is_logged_in() and (box.box.owner_id == auth.user.id) and (box.box.name != 'Unfiled'):}}
+      <a href="{{=URL('comic','new')}}" class="alert-link">Create a comic</a> and select this box as its destination or
+      <a href="{{=URL('box','add', args=[box.box.id])}}" class="alert-link">add an existing comic</a>!</a>
+      {{pass}}
+    </div>
     {{pass}}
   {{pass}}
 {{else:}}

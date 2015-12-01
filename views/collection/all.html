@@ -1,28 +1,30 @@
 {{extend 'layout.html'}}
 <!--<div class="flash">{{=response.flash or ''}}</div>-->
 <!--Display 5 largest boxes-->
-<h1>Your comics:</h1>
-{{if ('boxes' in globals()):}}
-  {{for box in boxes:}}
-  {{if (len(comics[box.box.id])>0):}}
-    <h2><a href={{=URL('box', 'view', args=[box.box.id])}}>{{=box.box.name}}</a></h1>
-    <h5>by {{=box.auth_user.screen_name}}</h5>
-    <strong>Created on:</strong> {{=box.box.created_on}}</br>
-    <strong>Privacy:</strong>
-    {{if (box.box.is_public):}}
-      Public
-    {{else:}}
-      Private
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center"></div>
+    </header>
+{{end}}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1>All comics</h3>
+  </div>
+  <div class="panel-body">
+    Here you can see all comics from across your collection at once, displayed in alphabetical order.
+  </div>
+</div>
+
+{{if ('comics' in globals()):}}
+  <div class="row">
+    {{for comic in comics:}}
+      {{include 'sub/comic_preview.html'}}
     {{pass}}
-        <h4>Contents:</h4>
-        <div class="row">
-          {{for comic in comics[box.box.id]:}}
-            {{include 'sub/comic_preview.html'}}
-          {{pass}}
-        </div>
-  {{pass}}
-  {{pass}}
+  </div>
 {{else:}}
-  {{=H5("There is no box to display")}}
+  <div class="alert alert-danger" role="alert">
+    <strong>You don't have any comics yet.</strong>
+    <a href="{{=URL('comic','new')}}" class="alert-link">Click here</a> to create your first comic!
+    {{pass}}
+  </div>
 {{pass}}
-<a href={{=URL('collection', 'index')}} class="btn btn-default">Back to collection</a>

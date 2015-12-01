@@ -34,13 +34,11 @@ def index():
 
 @auth.requires_login()
 def all():
-    boxes = db((db.box.owner_id == auth.user.id) & (auth.user.id == db.auth_user.id)).select()
-    if len(boxes)>0:
-        comics = {}
-        for box in boxes:
-            comics[box.box.id] = db((db.comic_in_box.box_id == box.box.id) & (db.comic_in_box.comic_id == db.comic.id) & (db.comic.owner_id == db.auth_user.id)).select()
-        return dict(boxes = boxes, comics = comics)
-    return dict()
+    comics = db((db.comic.owner_id == auth.user.id) & (auth.user.id == db.auth_user.id)).select(orderby = db.comic.title)
+    if len(comics)>0:
+        return dict(comics = comics)
+    else:
+        return dict()
 
 @auth.requires_login()
 def search():

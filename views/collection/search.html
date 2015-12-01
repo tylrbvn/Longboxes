@@ -3,7 +3,7 @@
 {{=form}}
 {{if ('results' in globals()):}}
   {{if (len(results)>0):}}
-    <h4>Search Results:</h4>
+    <h4>Results:</h4>
     <div class="row">
     {{for comic in results:}}
       <!--Filter out duplicate results caused by comics being in
@@ -13,6 +13,4 @@
       {{pass}}
     {{pass}}
     </div>
-    </br>
-    <a href={{=URL('collection', 'index')}} class="btn btn-default">Back to collection</a>
 {{pass}}
